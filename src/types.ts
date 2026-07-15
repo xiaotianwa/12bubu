@@ -39,6 +39,8 @@ export interface AppSettings {
   alwaysOnTop: boolean;
   opacity: number;
   soundEnabled: boolean;
+  quietMode: boolean;
+  edgeSnapEnabled: boolean;
   launchAtStartup: boolean;
   reminderIntervalMinutes: number;
   quietWhenFullscreen: boolean;

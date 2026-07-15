@@ -76,6 +76,34 @@ export function SettingsPanel() {
       </article>
       <article className="setting-card">
         <div>
+          <strong>安静模式</strong>
+          <p>暂停气泡提醒和系统通知，只保留手动互动。</p>
+        </div>
+        <label className="switch">
+          <input
+            type="checkbox"
+            checked={data.settings.quietMode}
+            onChange={(event) => void updateSetting("quietMode", event.target.checked)}
+          />
+          <span />
+        </label>
+      </article>
+      <article className="setting-card">
+        <div>
+          <strong>边缘吸附</strong>
+          <p>拖到屏幕边缘时自动贴齐，桌面更干净。</p>
+        </div>
+        <label className="switch">
+          <input
+            type="checkbox"
+            checked={data.settings.edgeSnapEnabled}
+            onChange={(event) => void updateSetting("edgeSnapEnabled", event.target.checked)}
+          />
+          <span />
+        </label>
+      </article>
+      <article className="setting-card">
+        <div>
           <strong>开机启动</strong>
           <p>登录 Windows 后自动召唤布布。</p>
         </div>

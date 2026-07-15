@@ -9,6 +9,8 @@ export interface AppSettings {
   alwaysOnTop: boolean;
   opacity: number;
   soundEnabled: boolean;
+  quietMode: boolean;
+  edgeSnapEnabled: boolean;
   launchAtStartup: boolean;
   reminderIntervalMinutes: number;
   quietWhenFullscreen: boolean;
@@ -62,6 +64,8 @@ export const defaultData: AppData = {
     alwaysOnTop: true,
     opacity: 1,
     soundEnabled: true,
+    quietMode: false,
+    edgeSnapEnabled: true,
     launchAtStartup: false,
     reminderIntervalMinutes: 45,
     quietWhenFullscreen: true,

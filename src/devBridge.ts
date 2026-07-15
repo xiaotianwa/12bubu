@@ -6,6 +6,8 @@ const fallbackData: AppData = {
     alwaysOnTop: true,
     opacity: 1,
     soundEnabled: true,
+    quietMode: false,
+    edgeSnapEnabled: true,
     launchAtStartup: false,
     reminderIntervalMinutes: 45,
     quietWhenFullscreen: true,
@@ -32,7 +34,13 @@ function readFallbackData(): AppData {
   const raw = localStorage.getItem("bubu-preview-data");
   if (!raw) return fallbackData;
   try {
-    return { ...fallbackData, ...(JSON.parse(raw) as Partial<AppData>) };
+    const parsed = JSON.parse(raw) as Partial<AppData>;
+    return {
+      ...fallbackData,
+      ...parsed,
+      settings: { ...fallbackData.settings, ...parsed.settings },
+      timer: { ...fallbackData.timer, ...parsed.timer }
+    };
   } catch {
     return fallbackData;
   }

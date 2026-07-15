@@ -24,7 +24,7 @@ const toolItems: WheelItem[] = [
   { label: "番茄钟", icon: "timer", panel: "timer", tone: "pink" },
   { label: "提醒", icon: "reminder", panel: "reminders", tone: "blue" },
   { label: "启动", icon: "launch", panel: "shortcuts", tone: "mint" },
-  { label: "散步", icon: "walk", action: "roam", tone: "pink" }
+  { label: "玩一下", icon: "walk", action: "roam", tone: "pink" }
 ];
 
 interface FunctionWheelProps {

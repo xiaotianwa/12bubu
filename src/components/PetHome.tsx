@@ -52,6 +52,7 @@ export function PetHome() {
   const [mood, setMood] = useState<PetMood>("idle");
   const [bubble, setBubble] = useState(defaultBubble);
   const [isDragging, setIsDragging] = useState(false);
+  const [quietMode, setQuietMode] = useState(false);
   const inactivityRef = useRef<number | null>(null);
   const moodTimerRef = useRef<number | null>(null);
   const roamTimerRef = useRef<number | null>(null);
@@ -73,6 +74,21 @@ export function PetHome() {
   useEffect(() => {
     moodRef.current = mood;
   }, [mood]);
+
+  useEffect(() => {
+    let alive = true;
+    const syncSettings = async () => {
+      const data = await window.bubu.getData();
+      if (alive) setQuietMode(data.settings.quietMode);
+    };
+
+    void syncSettings();
+    const id = window.setInterval(() => void syncSettings(), 5_000);
+    return () => {
+      alive = false;
+      window.clearInterval(id);
+    };
+  }, []);
 
   const clearMoodTimer = useCallback(() => {
     if (moodTimerRef.current) {
@@ -143,6 +159,7 @@ export function PetHome() {
 
   useEffect(() => {
     const id = window.setInterval(() => {
+      if (quietMode) return;
       if (moodRef.current !== "idle" || wheelOpen) return;
       const action = randomItem(ambientActions);
       showMood(action.mood, action.bubble, action.durationMs);
@@ -152,7 +169,7 @@ export function PetHome() {
       window.clearInterval(id);
       clearRoamTimer();
     };
-  }, [clearRoamTimer, showMood, startRoam, wheelOpen]);
+  }, [clearRoamTimer, quietMode, showMood, startRoam, wheelOpen]);
 
   useEffect(() => {
     return window.bubu.onGentleReminder(({ message }) => {
@@ -285,7 +302,7 @@ export function PetHome() {
   const isQuietBubble = mood === "idle" && bubble === defaultBubble;
 
   return (
-    <main className={`pet-stage ${wheelOpen ? "has-wheel" : ""}`}>
+    <main className={`pet-stage ${wheelOpen ? "has-wheel" : ""} ${quietMode ? "is-quiet-mode" : ""}`}>
       <button
         className="wheel-dismiss-layer no-drag"
         type="button"

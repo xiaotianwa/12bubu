@@ -6,6 +6,7 @@ import { readData, writeData } from "./store.js";
 const isDev = process.env.VITE_DEV_SERVER_URL || !app.isPackaged;
 const devUrl = process.env.VITE_DEV_SERVER_URL ?? "http://127.0.0.1:5173";
 const petWindowSize = { width: 360, height: 360 };
+const edgeSnapThreshold = 48;
 const reminderMessages: Record<ReminderType, string> = {
   water: "该喝点水啦，布布把杯子递到桌边。",
   rest: "休息一下眼睛吧，看看远处，布布在旁边等你。"
@@ -27,6 +28,11 @@ function getRendererUrl(route = "/"): string {
     return `${devUrl}${route}`;
   }
   return `file://${path.join(__dirname, "../dist/index.html")}${route === "/" ? "" : `#${route}`}`;
+}
+
+function getResourcePath(...segments: string[]): string {
+  const base = app.isPackaged ? process.resourcesPath : app.getAppPath();
+  return path.join(base, ...segments);
 }
 
 function resolvePetPosition(position: PetPosition | null): PetPosition {
@@ -93,6 +99,7 @@ function createMainWindow(): void {
 }
 
 function sendGentleReminder(type: ReminderType, message: string): void {
+  if (readData().settings.quietMode) return;
   mainWindow?.webContents.send("reminder:gentle", { type, message });
   if (Notification.isSupported()) {
     new Notification({ title: "一二布布", body: message, silent: true }).show();
@@ -111,6 +118,39 @@ function clampPetBounds(bounds: Electron.Rectangle, x: number, y: number): PetPo
     x: Math.max(area.x, Math.min(area.x + area.width - bounds.width, Math.round(x))),
     y: Math.max(area.y, Math.min(area.y + area.height - bounds.height, Math.round(y)))
   };
+}
+
+function settlePetBounds(bounds: Electron.Rectangle, x: number, y: number): PetPosition {
+  const clamped = clampPetBounds(bounds, x, y);
+  if (!readData().settings.edgeSnapEnabled) return clamped;
+
+  const area = screen.getDisplayMatching(bounds).workArea;
+  const left = area.x;
+  const right = area.x + area.width - bounds.width;
+  const top = area.y;
+  const bottom = area.y + area.height - bounds.height;
+
+  return {
+    x:
+      Math.abs(clamped.x - left) <= edgeSnapThreshold
+        ? left
+        : Math.abs(clamped.x - right) <= edgeSnapThreshold
+          ? right
+          : clamped.x,
+    y:
+      Math.abs(clamped.y - top) <= edgeSnapThreshold
+        ? top
+        : Math.abs(clamped.y - bottom) <= edgeSnapThreshold
+          ? bottom
+          : clamped.y
+  };
+}
+
+function settleAndPersistPet(bounds: Electron.Rectangle): void {
+  if (!mainWindow) return;
+  const next = settlePetBounds(bounds, bounds.x, bounds.y);
+  mainWindow.setBounds({ ...bounds, ...next }, true);
+  persistPetPosition(next.x, next.y);
 }
 
 function persistPetPosition(x: number, y: number): void {
@@ -182,7 +222,7 @@ function roamPet(pace = 420): void {
     if (progress >= 1) {
       clearPetMotion();
       const finalBounds = mainWindow?.getBounds();
-      if (finalBounds) persistPetPosition(finalBounds.x, finalBounds.y);
+      if (finalBounds) settleAndPersistPet(finalBounds);
     }
   }, 16);
 }
@@ -196,7 +236,7 @@ function throwPet(velocityX: number, velocityY: number): void {
 
   if (Math.hypot(vx, vy) < 0.08) {
     const bounds = mainWindow.getBounds();
-    persistPetPosition(bounds.x, bounds.y);
+    settleAndPersistPet(bounds);
     return;
   }
 
@@ -228,7 +268,7 @@ function throwPet(velocityX: number, velocityY: number): void {
     if (elapsed > 720 || Math.hypot(vx, vy) < 0.035) {
       clearPetMotion();
       const finalBounds = mainWindow?.getBounds();
-      if (finalBounds) persistPetPosition(finalBounds.x, finalBounds.y);
+      if (finalBounds) settleAndPersistPet(finalBounds);
     }
   }, 16);
 }
@@ -330,7 +370,7 @@ function createPanelWindow(panel: string): void {
 
 function refreshTray(): void {
   const data = readData();
-  const icon = nativeImage.createFromPath(path.join(app.getAppPath(), "assets", "icons", "icon.png"));
+  const icon = nativeImage.createFromPath(getResourcePath("assets", "icons", "icon.png"));
   tray ??= new Tray(icon.isEmpty() ? nativeImage.createEmpty() : icon);
   tray.setToolTip("一二布布桌宠");
   tray.setContextMenu(
@@ -351,6 +391,15 @@ function refreshTray(): void {
           next.settings.alwaysOnTop = !next.settings.alwaysOnTop;
           mainWindow?.setAlwaysOnTop(next.settings.alwaysOnTop);
           panelWindow?.setAlwaysOnTop(next.settings.alwaysOnTop);
+          writeData(next);
+          refreshTray();
+        }
+      },
+      {
+        label: data.settings.quietMode ? "关闭安静模式" : "开启安静模式",
+        click: () => {
+          const next = readData();
+          next.settings.quietMode = !next.settings.quietMode;
           writeData(next);
           refreshTray();
         }
@@ -400,7 +449,9 @@ app.whenReady().then(() => {
   ipcMain.handle("window:save-position", () => {
     const bounds = mainWindow?.getBounds();
     if (!bounds) return readData();
-    return updateSettings({ petPosition: { x: bounds.x, y: bounds.y } });
+    const next = settlePetBounds(bounds, bounds.x, bounds.y);
+    mainWindow?.setBounds({ ...bounds, ...next }, true);
+    return updateSettings({ petPosition: next });
   });
   ipcMain.handle("window:nudge", (_event, dx: number, dy: number) => {
     movePetBy(dx, dy);

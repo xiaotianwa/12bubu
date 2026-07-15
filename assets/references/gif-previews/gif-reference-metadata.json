@@ -1,0 +1,101 @@
+[
+  {
+    "name": "一二咬布布.gif",
+    "path": "E:\\一二布布桌面宠物\\img\\一二咬布布.gif",
+    "preview": "E:\\一二布布桌面宠物\\assets\\references\\gif-previews\\一二咬布布-preview.jpg",
+    "width": 640,
+    "height": 491,
+    "frames": 17,
+    "duration_ms": 2200,
+    "avg_frame_ms": 129.4,
+    "extension": ".gif"
+  },
+  {
+    "name": "一二布布最最好.gif",
+    "path": "E:\\一二布布桌面宠物\\img\\一二布布最最好.gif",
+    "preview": "E:\\一二布布桌面宠物\\assets\\references\\gif-previews\\一二布布最最好-preview.jpg",
+    "width": 240,
+    "height": 240,
+    "frames": 28,
+    "duration_ms": 2240,
+    "avg_frame_ms": 80.0,
+    "extension": ".gif"
+  },
+  {
+    "name": "一二布布跳舞.gif",
+    "path": "E:\\一二布布桌面宠物\\img\\一二布布跳舞.gif",
+    "preview": "E:\\一二布布桌面宠物\\assets\\references\\gif-previews\\一二布布跳舞-preview.jpg",
+    "width": 378,
+    "height": 240,
+    "frames": 16,
+    "duration_ms": 1220,
+    "avg_frame_ms": 76.2,
+    "extension": ".gif"
+  },
+  {
+    "name": "一二白眼.gif",
+    "path": "E:\\一二布布桌面宠物\\img\\一二白眼.gif",
+    "preview": "E:\\一二布布桌面宠物\\assets\\references\\gif-previews\\一二白眼-preview.jpg",
+    "width": 481,
+    "height": 480,
+    "frames": 3,
+    "duration_ms": 180,
+    "avg_frame_ms": 60.0,
+    "extension": ".gif"
+  },
+  {
+    "name": "一二舒服睡觉.webp",
+    "path": "E:\\一二布布桌面宠物\\img\\一二舒服睡觉.webp",
+    "preview": "E:\\一二布布桌面宠物\\assets\\references\\gif-previews\\一二舒服睡觉-preview.jpg",
+    "width": 300,
+    "height": 300,
+    "frames": 5,
+    "duration_ms": 2000,
+    "avg_frame_ms": 400.0,
+    "extension": ".webp"
+  },
+  {
+    "name": "一二遛狗.gif",
+    "path": "E:\\一二布布桌面宠物\\img\\一二遛狗.gif",
+    "preview": "E:\\一二布布桌面宠物\\assets\\references\\gif-previews\\一二遛狗-preview.jpg",
+    "width": 260,
+    "height": 260,
+    "frames": 16,
+    "duration_ms": 1600,
+    "avg_frame_ms": 100.0,
+    "extension": ".gif"
+  },
+  {
+    "name": "一二骑着布布车.webp",
+    "path": "E:\\一二布布桌面宠物\\img\\一二骑着布布车.webp",
+    "preview": "E:\\一二布布桌面宠物\\assets\\references\\gif-previews\\一二骑着布布车-preview.jpg",
+    "width": 300,
+    "height": 300,
+    "frames": 5,
+    "duration_ms": 500,
+    "avg_frame_ms": 100.0,
+    "extension": ".webp"
+  },
+  {
+    "name": "布布一二转圈.webp",
+    "path": "E:\\一二布布桌面宠物\\img\\布布一二转圈.webp",
+    "preview": "E:\\一二布布桌面宠物\\assets\\references\\gif-previews\\布布一二转圈-preview.jpg",
+    "width": 155,
+    "height": 155,
+    "frames": 8,
+    "duration_ms": 880,
+    "avg_frame_ms": 110.0,
+    "extension": ".webp"
+  },
+  {
+    "name": "鬼脸.gif",
+    "path": "E:\\一二布布桌面宠物\\img\\鬼脸.gif",
+    "preview": "E:\\一二布布桌面宠物\\assets\\references\\gif-previews\\鬼脸-preview.jpg",
+    "width": 497,
+    "height": 497,
+    "frames": 3,
+    "duration_ms": 300,
+    "avg_frame_ms": 100.0,
+    "extension": ".gif"
+  }
+]

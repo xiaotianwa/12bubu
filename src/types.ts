@@ -1,0 +1,116 @@
+export type ReminderType = "water" | "rest";
+export type PanelName = "notes" | "timer" | "reminders" | "shortcuts" | "settings";
+export type PetMood =
+  | "idle"
+  | "blink"
+  | "walk"
+  | "sleep"
+  | "drag"
+  | "happy"
+  | "note"
+  | "focus"
+  | "reminder"
+  | "shortcut"
+  | "settings"
+  | "feed"
+  | "buddy"
+  | "angry"
+  | "shy"
+  | "bite"
+  | "dance"
+  | "eyeRoll"
+  | "comfySleep"
+  | "walkDog"
+  | "ride"
+  | "spin"
+  | "silly"
+  | "work"
+  | "slack"
+  | "recharge"
+  | "patrol"
+  | "celebrate";
+
+export interface PetPosition {
+  x: number;
+  y: number;
+}
+
+export interface AppSettings {
+  alwaysOnTop: boolean;
+  opacity: number;
+  soundEnabled: boolean;
+  launchAtStartup: boolean;
+  reminderIntervalMinutes: number;
+  quietWhenFullscreen: boolean;
+  petPosition: PetPosition | null;
+}
+
+export interface NoteItem {
+  id: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  pinned: boolean;
+}
+
+export interface ReminderRule {
+  id: string;
+  type: ReminderType;
+  intervalMinutes: number;
+  enabled: boolean;
+  lastTriggeredAt: string | null;
+}
+
+export interface ShortcutItem {
+  id: string;
+  name: string;
+  appPath: string;
+  iconPath?: string;
+}
+
+export interface TimerState {
+  mode: "focus" | "break";
+  remainingSeconds: number;
+  running: boolean;
+}
+
+export interface GentleReminderEvent {
+  type: ReminderType;
+  message: string;
+}
+
+export interface AppData {
+  settings: AppSettings;
+  notes: NoteItem[];
+  reminders: ReminderRule[];
+  shortcuts: ShortcutItem[];
+  timer: TimerState;
+}
+
+export interface BubuApi {
+  getData: () => Promise<AppData>;
+  saveData: (data: AppData) => Promise<AppData>;
+  updateSettings: (settings: Partial<AppSettings>) => Promise<AppData>;
+  setAlwaysOnTop: (value: boolean) => Promise<AppData>;
+  setOpacity: (value: number) => Promise<AppData>;
+  savePetPosition: () => Promise<AppData>;
+  openPanel: (panel: PanelName) => Promise<void>;
+  closePanel: () => Promise<void>;
+  quit: () => Promise<void>;
+  pickShortcut: () => Promise<string | null>;
+  launchShortcut: (appPath: string) => Promise<{ ok: boolean; error?: string }>;
+  nudgePet: (dx: number, dy: number) => Promise<void>;
+  roamPet: (pace?: number) => Promise<void>;
+  movePet: (dx: number, dy: number) => Promise<void>;
+  throwPet: (velocityX: number, velocityY: number) => Promise<void>;
+  setStartup: (value: boolean) => Promise<AppData>;
+  notify: (message: string) => Promise<void>;
+  onGentleReminder: (callback: (event: GentleReminderEvent) => void) => () => void;
+  onTimerUpdate: (callback: (timer: TimerState) => void) => () => void;
+}
+
+declare global {
+  interface Window {
+    bubu: BubuApi;
+  }
+}

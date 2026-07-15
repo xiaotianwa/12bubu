@@ -101,8 +101,8 @@ textarea {
 
 .pet-hitbox {
   position: relative;
-  width: 285px;
-  height: 278px;
+  width: 248px;
+  height: 244px;
   display: grid;
   place-items: end center;
   cursor: grab;
@@ -175,8 +175,8 @@ textarea {
 }
 
 .pet-button {
-  width: 292px;
-  height: 242px;
+  width: 244px;
+  height: 218px;
   padding: 0;
   background: transparent;
   touch-action: none;
@@ -221,8 +221,8 @@ textarea {
   position: relative;
   display: grid;
   place-items: end center;
-  width: 300px;
-  height: 236px;
+  width: 244px;
+  height: 218px;
   isolation: isolate;
 }
 
@@ -276,8 +276,8 @@ textarea {
 }
 
 .asset-frame-sequence {
-  width: 256px;
-  height: 256px;
+  width: 212px;
+  height: 212px;
   place-items: center;
 }
 
@@ -286,8 +286,8 @@ textarea {
 }
 
 .asset-frame-sequence .pet-official-asset {
-  max-width: 256px;
-  max-height: 256px;
+  max-width: 212px;
+  max-height: 212px;
 }
 
 .pet-frame-asset {

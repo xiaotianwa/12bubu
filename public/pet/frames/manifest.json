@@ -6,7 +6,6 @@
   },
   "preferredFormat": "webp",
   "fallbackFormat": "png",
-  "generatedAt": "2026-07-15T00:00:00+08:00",
   "notes": "Optimized WebP frames generated from retained PNG extracts. PNG frames remain for development fallback and source review.",
   "animations": {
     "bite": {
@@ -45,6 +44,18 @@
         "pet/frames/eyeRoll/eyeRoll_002.webp"
       ]
     },
+    "focus": {
+      "name": "focus optimized WebP frames",
+      "frameMs": 160,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/focus/focus_000.webp",
+        "pet/frames/focus/focus_001.webp",
+        "pet/frames/focus/focus_002.webp",
+        "pet/frames/focus/focus_003.webp"
+      ]
+    },
     "happy": {
       "name": "happy optimized WebP frames",
       "frameMs": 76,
@@ -70,39 +81,40 @@
       ]
     },
     "idle": {
-      "name": "idle optimized WebP frames",
-      "frameMs": 80,
+      "name": "idle alias of softIdle",
+      "frameMs": 160,
       "loop": true,
       "format": "webp",
       "frames": [
-        "pet/frames/idle/idle_000.webp",
-        "pet/frames/idle/idle_001.webp",
-        "pet/frames/idle/idle_002.webp",
-        "pet/frames/idle/idle_003.webp",
-        "pet/frames/idle/idle_004.webp",
-        "pet/frames/idle/idle_005.webp",
-        "pet/frames/idle/idle_006.webp",
-        "pet/frames/idle/idle_007.webp",
-        "pet/frames/idle/idle_008.webp",
-        "pet/frames/idle/idle_009.webp",
-        "pet/frames/idle/idle_010.webp",
-        "pet/frames/idle/idle_011.webp",
-        "pet/frames/idle/idle_012.webp",
-        "pet/frames/idle/idle_013.webp",
-        "pet/frames/idle/idle_014.webp",
-        "pet/frames/idle/idle_015.webp",
-        "pet/frames/idle/idle_016.webp",
-        "pet/frames/idle/idle_017.webp",
-        "pet/frames/idle/idle_018.webp",
-        "pet/frames/idle/idle_019.webp",
-        "pet/frames/idle/idle_020.webp",
-        "pet/frames/idle/idle_021.webp",
-        "pet/frames/idle/idle_022.webp",
-        "pet/frames/idle/idle_023.webp",
-        "pet/frames/idle/idle_024.webp",
-        "pet/frames/idle/idle_025.webp",
-        "pet/frames/idle/idle_026.webp",
-        "pet/frames/idle/idle_027.webp"
+        "pet/frames/softIdle/softIdle_000.webp",
+        "pet/frames/softIdle/softIdle_001.webp",
+        "pet/frames/softIdle/softIdle_002.webp",
+        "pet/frames/softIdle/softIdle_003.webp"
+      ],
+      "aliasOf": "softIdle"
+    },
+    "note": {
+      "name": "note optimized WebP frames",
+      "frameMs": 140,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/note/note_000.webp",
+        "pet/frames/note/note_001.webp",
+        "pet/frames/note/note_002.webp",
+        "pet/frames/note/note_003.webp"
+      ]
+    },
+    "reminder": {
+      "name": "reminder optimized WebP frames",
+      "frameMs": 140,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/reminder/reminder_000.webp",
+        "pet/frames/reminder/reminder_001.webp",
+        "pet/frames/reminder/reminder_002.webp",
+        "pet/frames/reminder/reminder_003.webp"
       ]
     },
     "ride": {
@@ -116,6 +128,30 @@
         "pet/frames/ride/ride_002.webp",
         "pet/frames/ride/ride_003.webp",
         "pet/frames/ride/ride_004.webp"
+      ]
+    },
+    "settings": {
+      "name": "settings optimized WebP frames",
+      "frameMs": 150,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/settings/settings_000.webp",
+        "pet/frames/settings/settings_001.webp",
+        "pet/frames/settings/settings_002.webp",
+        "pet/frames/settings/settings_003.webp"
+      ]
+    },
+    "shortcut": {
+      "name": "shortcut optimized WebP frames",
+      "frameMs": 140,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/shortcut/shortcut_000.webp",
+        "pet/frames/shortcut/shortcut_001.webp",
+        "pet/frames/shortcut/shortcut_002.webp",
+        "pet/frames/shortcut/shortcut_003.webp"
       ]
     },
     "silly": {
@@ -140,6 +176,18 @@
         "pet/frames/sleep/sleep_002.webp",
         "pet/frames/sleep/sleep_003.webp",
         "pet/frames/sleep/sleep_004.webp"
+      ]
+    },
+    "softIdle": {
+      "name": "softIdle optimized WebP frames",
+      "frameMs": 160,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/softIdle/softIdle_000.webp",
+        "pet/frames/softIdle/softIdle_001.webp",
+        "pet/frames/softIdle/softIdle_002.webp",
+        "pet/frames/softIdle/softIdle_003.webp"
       ]
     },
     "spin": {
@@ -181,6 +229,71 @@
         "pet/frames/walkDog/walkDog_014.webp",
         "pet/frames/walkDog/walkDog_015.webp"
       ]
+    },
+    "blink": {
+      "name": "blink alias of softIdle",
+      "frameMs": 160,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/softIdle/softIdle_000.webp",
+        "pet/frames/softIdle/softIdle_001.webp",
+        "pet/frames/softIdle/softIdle_002.webp",
+        "pet/frames/softIdle/softIdle_003.webp"
+      ],
+      "aliasOf": "softIdle"
+    },
+    "buddy": {
+      "name": "buddy alias of softIdle",
+      "frameMs": 160,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/softIdle/softIdle_000.webp",
+        "pet/frames/softIdle/softIdle_001.webp",
+        "pet/frames/softIdle/softIdle_002.webp",
+        "pet/frames/softIdle/softIdle_003.webp"
+      ],
+      "aliasOf": "softIdle"
+    },
+    "slack": {
+      "name": "slack alias of softIdle",
+      "frameMs": 160,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/softIdle/softIdle_000.webp",
+        "pet/frames/softIdle/softIdle_001.webp",
+        "pet/frames/softIdle/softIdle_002.webp",
+        "pet/frames/softIdle/softIdle_003.webp"
+      ],
+      "aliasOf": "softIdle"
+    },
+    "work": {
+      "name": "work alias of focus",
+      "frameMs": 160,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/focus/focus_000.webp",
+        "pet/frames/focus/focus_001.webp",
+        "pet/frames/focus/focus_002.webp",
+        "pet/frames/focus/focus_003.webp"
+      ],
+      "aliasOf": "focus"
+    },
+    "drag": {
+      "name": "drag alias of softIdle",
+      "frameMs": 160,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/softIdle/softIdle_000.webp",
+        "pet/frames/softIdle/softIdle_001.webp",
+        "pet/frames/softIdle/softIdle_002.webp",
+        "pet/frames/softIdle/softIdle_003.webp"
+      ],
+      "aliasOf": "softIdle"
     },
     "feed": {
       "name": "feed alias of bite",
@@ -273,20 +386,6 @@
       ],
       "aliasOf": "walkDog"
     },
-    "shortcut": {
-      "name": "shortcut alias of ride",
-      "frameMs": 98,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/ride/ride_000.webp",
-        "pet/frames/ride/ride_001.webp",
-        "pet/frames/ride/ride_002.webp",
-        "pet/frames/ride/ride_003.webp",
-        "pet/frames/ride/ride_004.webp"
-      ],
-      "aliasOf": "ride"
-    },
     "dance": {
       "name": "dance alias of happy",
       "frameMs": 76,
@@ -336,339 +435,6 @@
         "pet/frames/happy/happy_015.webp"
       ],
       "aliasOf": "happy"
-    },
-    "buddy": {
-      "name": "buddy alias of idle",
-      "frameMs": 80,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/idle/idle_000.webp",
-        "pet/frames/idle/idle_001.webp",
-        "pet/frames/idle/idle_002.webp",
-        "pet/frames/idle/idle_003.webp",
-        "pet/frames/idle/idle_004.webp",
-        "pet/frames/idle/idle_005.webp",
-        "pet/frames/idle/idle_006.webp",
-        "pet/frames/idle/idle_007.webp",
-        "pet/frames/idle/idle_008.webp",
-        "pet/frames/idle/idle_009.webp",
-        "pet/frames/idle/idle_010.webp",
-        "pet/frames/idle/idle_011.webp",
-        "pet/frames/idle/idle_012.webp",
-        "pet/frames/idle/idle_013.webp",
-        "pet/frames/idle/idle_014.webp",
-        "pet/frames/idle/idle_015.webp",
-        "pet/frames/idle/idle_016.webp",
-        "pet/frames/idle/idle_017.webp",
-        "pet/frames/idle/idle_018.webp",
-        "pet/frames/idle/idle_019.webp",
-        "pet/frames/idle/idle_020.webp",
-        "pet/frames/idle/idle_021.webp",
-        "pet/frames/idle/idle_022.webp",
-        "pet/frames/idle/idle_023.webp",
-        "pet/frames/idle/idle_024.webp",
-        "pet/frames/idle/idle_025.webp",
-        "pet/frames/idle/idle_026.webp",
-        "pet/frames/idle/idle_027.webp"
-      ],
-      "aliasOf": "idle"
-    },
-    "slack": {
-      "name": "slack alias of idle",
-      "frameMs": 80,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/idle/idle_000.webp",
-        "pet/frames/idle/idle_001.webp",
-        "pet/frames/idle/idle_002.webp",
-        "pet/frames/idle/idle_003.webp",
-        "pet/frames/idle/idle_004.webp",
-        "pet/frames/idle/idle_005.webp",
-        "pet/frames/idle/idle_006.webp",
-        "pet/frames/idle/idle_007.webp",
-        "pet/frames/idle/idle_008.webp",
-        "pet/frames/idle/idle_009.webp",
-        "pet/frames/idle/idle_010.webp",
-        "pet/frames/idle/idle_011.webp",
-        "pet/frames/idle/idle_012.webp",
-        "pet/frames/idle/idle_013.webp",
-        "pet/frames/idle/idle_014.webp",
-        "pet/frames/idle/idle_015.webp",
-        "pet/frames/idle/idle_016.webp",
-        "pet/frames/idle/idle_017.webp",
-        "pet/frames/idle/idle_018.webp",
-        "pet/frames/idle/idle_019.webp",
-        "pet/frames/idle/idle_020.webp",
-        "pet/frames/idle/idle_021.webp",
-        "pet/frames/idle/idle_022.webp",
-        "pet/frames/idle/idle_023.webp",
-        "pet/frames/idle/idle_024.webp",
-        "pet/frames/idle/idle_025.webp",
-        "pet/frames/idle/idle_026.webp",
-        "pet/frames/idle/idle_027.webp"
-      ],
-      "aliasOf": "idle"
-    },
-    "blink": {
-      "name": "blink alias of idle",
-      "frameMs": 80,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/idle/idle_000.webp",
-        "pet/frames/idle/idle_001.webp",
-        "pet/frames/idle/idle_002.webp",
-        "pet/frames/idle/idle_003.webp",
-        "pet/frames/idle/idle_004.webp",
-        "pet/frames/idle/idle_005.webp",
-        "pet/frames/idle/idle_006.webp",
-        "pet/frames/idle/idle_007.webp",
-        "pet/frames/idle/idle_008.webp",
-        "pet/frames/idle/idle_009.webp",
-        "pet/frames/idle/idle_010.webp",
-        "pet/frames/idle/idle_011.webp",
-        "pet/frames/idle/idle_012.webp",
-        "pet/frames/idle/idle_013.webp",
-        "pet/frames/idle/idle_014.webp",
-        "pet/frames/idle/idle_015.webp",
-        "pet/frames/idle/idle_016.webp",
-        "pet/frames/idle/idle_017.webp",
-        "pet/frames/idle/idle_018.webp",
-        "pet/frames/idle/idle_019.webp",
-        "pet/frames/idle/idle_020.webp",
-        "pet/frames/idle/idle_021.webp",
-        "pet/frames/idle/idle_022.webp",
-        "pet/frames/idle/idle_023.webp",
-        "pet/frames/idle/idle_024.webp",
-        "pet/frames/idle/idle_025.webp",
-        "pet/frames/idle/idle_026.webp",
-        "pet/frames/idle/idle_027.webp"
-      ],
-      "aliasOf": "idle"
-    },
-    "work": {
-      "name": "work alias of idle",
-      "frameMs": 80,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/idle/idle_000.webp",
-        "pet/frames/idle/idle_001.webp",
-        "pet/frames/idle/idle_002.webp",
-        "pet/frames/idle/idle_003.webp",
-        "pet/frames/idle/idle_004.webp",
-        "pet/frames/idle/idle_005.webp",
-        "pet/frames/idle/idle_006.webp",
-        "pet/frames/idle/idle_007.webp",
-        "pet/frames/idle/idle_008.webp",
-        "pet/frames/idle/idle_009.webp",
-        "pet/frames/idle/idle_010.webp",
-        "pet/frames/idle/idle_011.webp",
-        "pet/frames/idle/idle_012.webp",
-        "pet/frames/idle/idle_013.webp",
-        "pet/frames/idle/idle_014.webp",
-        "pet/frames/idle/idle_015.webp",
-        "pet/frames/idle/idle_016.webp",
-        "pet/frames/idle/idle_017.webp",
-        "pet/frames/idle/idle_018.webp",
-        "pet/frames/idle/idle_019.webp",
-        "pet/frames/idle/idle_020.webp",
-        "pet/frames/idle/idle_021.webp",
-        "pet/frames/idle/idle_022.webp",
-        "pet/frames/idle/idle_023.webp",
-        "pet/frames/idle/idle_024.webp",
-        "pet/frames/idle/idle_025.webp",
-        "pet/frames/idle/idle_026.webp",
-        "pet/frames/idle/idle_027.webp"
-      ],
-      "aliasOf": "idle"
-    },
-    "note": {
-      "name": "note alias of idle",
-      "frameMs": 80,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/idle/idle_000.webp",
-        "pet/frames/idle/idle_001.webp",
-        "pet/frames/idle/idle_002.webp",
-        "pet/frames/idle/idle_003.webp",
-        "pet/frames/idle/idle_004.webp",
-        "pet/frames/idle/idle_005.webp",
-        "pet/frames/idle/idle_006.webp",
-        "pet/frames/idle/idle_007.webp",
-        "pet/frames/idle/idle_008.webp",
-        "pet/frames/idle/idle_009.webp",
-        "pet/frames/idle/idle_010.webp",
-        "pet/frames/idle/idle_011.webp",
-        "pet/frames/idle/idle_012.webp",
-        "pet/frames/idle/idle_013.webp",
-        "pet/frames/idle/idle_014.webp",
-        "pet/frames/idle/idle_015.webp",
-        "pet/frames/idle/idle_016.webp",
-        "pet/frames/idle/idle_017.webp",
-        "pet/frames/idle/idle_018.webp",
-        "pet/frames/idle/idle_019.webp",
-        "pet/frames/idle/idle_020.webp",
-        "pet/frames/idle/idle_021.webp",
-        "pet/frames/idle/idle_022.webp",
-        "pet/frames/idle/idle_023.webp",
-        "pet/frames/idle/idle_024.webp",
-        "pet/frames/idle/idle_025.webp",
-        "pet/frames/idle/idle_026.webp",
-        "pet/frames/idle/idle_027.webp"
-      ],
-      "aliasOf": "idle"
-    },
-    "focus": {
-      "name": "focus alias of idle",
-      "frameMs": 80,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/idle/idle_000.webp",
-        "pet/frames/idle/idle_001.webp",
-        "pet/frames/idle/idle_002.webp",
-        "pet/frames/idle/idle_003.webp",
-        "pet/frames/idle/idle_004.webp",
-        "pet/frames/idle/idle_005.webp",
-        "pet/frames/idle/idle_006.webp",
-        "pet/frames/idle/idle_007.webp",
-        "pet/frames/idle/idle_008.webp",
-        "pet/frames/idle/idle_009.webp",
-        "pet/frames/idle/idle_010.webp",
-        "pet/frames/idle/idle_011.webp",
-        "pet/frames/idle/idle_012.webp",
-        "pet/frames/idle/idle_013.webp",
-        "pet/frames/idle/idle_014.webp",
-        "pet/frames/idle/idle_015.webp",
-        "pet/frames/idle/idle_016.webp",
-        "pet/frames/idle/idle_017.webp",
-        "pet/frames/idle/idle_018.webp",
-        "pet/frames/idle/idle_019.webp",
-        "pet/frames/idle/idle_020.webp",
-        "pet/frames/idle/idle_021.webp",
-        "pet/frames/idle/idle_022.webp",
-        "pet/frames/idle/idle_023.webp",
-        "pet/frames/idle/idle_024.webp",
-        "pet/frames/idle/idle_025.webp",
-        "pet/frames/idle/idle_026.webp",
-        "pet/frames/idle/idle_027.webp"
-      ],
-      "aliasOf": "idle"
-    },
-    "reminder": {
-      "name": "reminder alias of idle",
-      "frameMs": 80,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/idle/idle_000.webp",
-        "pet/frames/idle/idle_001.webp",
-        "pet/frames/idle/idle_002.webp",
-        "pet/frames/idle/idle_003.webp",
-        "pet/frames/idle/idle_004.webp",
-        "pet/frames/idle/idle_005.webp",
-        "pet/frames/idle/idle_006.webp",
-        "pet/frames/idle/idle_007.webp",
-        "pet/frames/idle/idle_008.webp",
-        "pet/frames/idle/idle_009.webp",
-        "pet/frames/idle/idle_010.webp",
-        "pet/frames/idle/idle_011.webp",
-        "pet/frames/idle/idle_012.webp",
-        "pet/frames/idle/idle_013.webp",
-        "pet/frames/idle/idle_014.webp",
-        "pet/frames/idle/idle_015.webp",
-        "pet/frames/idle/idle_016.webp",
-        "pet/frames/idle/idle_017.webp",
-        "pet/frames/idle/idle_018.webp",
-        "pet/frames/idle/idle_019.webp",
-        "pet/frames/idle/idle_020.webp",
-        "pet/frames/idle/idle_021.webp",
-        "pet/frames/idle/idle_022.webp",
-        "pet/frames/idle/idle_023.webp",
-        "pet/frames/idle/idle_024.webp",
-        "pet/frames/idle/idle_025.webp",
-        "pet/frames/idle/idle_026.webp",
-        "pet/frames/idle/idle_027.webp"
-      ],
-      "aliasOf": "idle"
-    },
-    "settings": {
-      "name": "settings alias of idle",
-      "frameMs": 80,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/idle/idle_000.webp",
-        "pet/frames/idle/idle_001.webp",
-        "pet/frames/idle/idle_002.webp",
-        "pet/frames/idle/idle_003.webp",
-        "pet/frames/idle/idle_004.webp",
-        "pet/frames/idle/idle_005.webp",
-        "pet/frames/idle/idle_006.webp",
-        "pet/frames/idle/idle_007.webp",
-        "pet/frames/idle/idle_008.webp",
-        "pet/frames/idle/idle_009.webp",
-        "pet/frames/idle/idle_010.webp",
-        "pet/frames/idle/idle_011.webp",
-        "pet/frames/idle/idle_012.webp",
-        "pet/frames/idle/idle_013.webp",
-        "pet/frames/idle/idle_014.webp",
-        "pet/frames/idle/idle_015.webp",
-        "pet/frames/idle/idle_016.webp",
-        "pet/frames/idle/idle_017.webp",
-        "pet/frames/idle/idle_018.webp",
-        "pet/frames/idle/idle_019.webp",
-        "pet/frames/idle/idle_020.webp",
-        "pet/frames/idle/idle_021.webp",
-        "pet/frames/idle/idle_022.webp",
-        "pet/frames/idle/idle_023.webp",
-        "pet/frames/idle/idle_024.webp",
-        "pet/frames/idle/idle_025.webp",
-        "pet/frames/idle/idle_026.webp",
-        "pet/frames/idle/idle_027.webp"
-      ],
-      "aliasOf": "idle"
-    },
-    "drag": {
-      "name": "drag alias of idle",
-      "frameMs": 80,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/idle/idle_000.webp",
-        "pet/frames/idle/idle_001.webp",
-        "pet/frames/idle/idle_002.webp",
-        "pet/frames/idle/idle_003.webp",
-        "pet/frames/idle/idle_004.webp",
-        "pet/frames/idle/idle_005.webp",
-        "pet/frames/idle/idle_006.webp",
-        "pet/frames/idle/idle_007.webp",
-        "pet/frames/idle/idle_008.webp",
-        "pet/frames/idle/idle_009.webp",
-        "pet/frames/idle/idle_010.webp",
-        "pet/frames/idle/idle_011.webp",
-        "pet/frames/idle/idle_012.webp",
-        "pet/frames/idle/idle_013.webp",
-        "pet/frames/idle/idle_014.webp",
-        "pet/frames/idle/idle_015.webp",
-        "pet/frames/idle/idle_016.webp",
-        "pet/frames/idle/idle_017.webp",
-        "pet/frames/idle/idle_018.webp",
-        "pet/frames/idle/idle_019.webp",
-        "pet/frames/idle/idle_020.webp",
-        "pet/frames/idle/idle_021.webp",
-        "pet/frames/idle/idle_022.webp",
-        "pet/frames/idle/idle_023.webp",
-        "pet/frames/idle/idle_024.webp",
-        "pet/frames/idle/idle_025.webp",
-        "pet/frames/idle/idle_026.webp",
-        "pet/frames/idle/idle_027.webp"
-      ],
-      "aliasOf": "idle"
     },
     "walk": {
       "name": "walk alias of walkDog",

@@ -10,6 +10,12 @@ ROOT = Path(__file__).resolve().parents[1]
 FRAMES_ROOT = ROOT / "public" / "pet" / "frames"
 
 FRAME_MS = {
+    "softIdle": 160,
+    "note": 140,
+    "focus": 160,
+    "reminder": 140,
+    "shortcut": 140,
+    "settings": 150,
     "idle": 80,
     "happy": 76,
     "bite": 129,
@@ -22,23 +28,19 @@ FRAME_MS = {
 }
 
 ALIASES = {
+    "idle": "softIdle",
+    "blink": "softIdle",
+    "buddy": "softIdle",
+    "slack": "softIdle",
+    "work": "focus",
+    "drag": "softIdle",
     "feed": "bite",
     "angry": "eyeRoll",
     "comfySleep": "sleep",
     "recharge": "sleep",
     "patrol": "walkDog",
-    "shortcut": "ride",
     "dance": "happy",
     "celebrate": "happy",
-    "buddy": "idle",
-    "slack": "idle",
-    "blink": "idle",
-    "work": "idle",
-    "note": "idle",
-    "focus": "idle",
-    "reminder": "idle",
-    "settings": "idle",
-    "drag": "idle",
     "walk": "walkDog",
     "shy": "silly",
 }

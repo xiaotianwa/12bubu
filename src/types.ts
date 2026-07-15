@@ -41,6 +41,7 @@ export interface AppSettings {
   soundEnabled: boolean;
   quietMode: boolean;
   edgeSnapEnabled: boolean;
+  onboardingSeen: boolean;
   launchAtStartup: boolean;
   reminderIntervalMinutes: number;
   quietWhenFullscreen: boolean;
@@ -67,6 +68,7 @@ export interface ShortcutItem {
   id: string;
   name: string;
   appPath: string;
+  iconDataUrl?: string;
   iconPath?: string;
 }
 
@@ -79,6 +81,18 @@ export interface TimerState {
 export interface GentleReminderEvent {
   type: ReminderType;
   message: string;
+}
+
+export interface TimerCompleteEvent {
+  completedMode: TimerState["mode"];
+  nextMode: TimerState["mode"];
+  message: string;
+}
+
+export interface ShortcutPickResult {
+  appPath: string;
+  name: string;
+  iconDataUrl?: string;
 }
 
 export interface AppData {
@@ -99,7 +113,7 @@ export interface BubuApi {
   openPanel: (panel: PanelName) => Promise<void>;
   closePanel: () => Promise<void>;
   quit: () => Promise<void>;
-  pickShortcut: () => Promise<string | null>;
+  pickShortcut: () => Promise<ShortcutPickResult | null>;
   launchShortcut: (appPath: string) => Promise<{ ok: boolean; error?: string }>;
   nudgePet: (dx: number, dy: number) => Promise<void>;
   roamPet: (pace?: number) => Promise<void>;
@@ -107,8 +121,11 @@ export interface BubuApi {
   throwPet: (velocityX: number, velocityY: number) => Promise<void>;
   setStartup: (value: boolean) => Promise<AppData>;
   notify: (message: string) => Promise<void>;
+  showPetMenu: () => Promise<void>;
+  checkForUpdates: () => Promise<{ ok: boolean; message: string }>;
   onGentleReminder: (callback: (event: GentleReminderEvent) => void) => () => void;
   onTimerUpdate: (callback: (timer: TimerState) => void) => () => void;
+  onTimerComplete: (callback: (event: TimerCompleteEvent) => void) => () => void;
 }
 
 declare global {

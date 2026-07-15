@@ -11,6 +11,7 @@ export interface AppSettings {
   soundEnabled: boolean;
   quietMode: boolean;
   edgeSnapEnabled: boolean;
+  onboardingSeen: boolean;
   launchAtStartup: boolean;
   reminderIntervalMinutes: number;
   quietWhenFullscreen: boolean;
@@ -37,6 +38,7 @@ export interface ShortcutItem {
   id: string;
   name: string;
   appPath: string;
+  iconDataUrl?: string;
   iconPath?: string;
 }
 
@@ -49,6 +51,18 @@ export interface TimerState {
 export interface GentleReminderEvent {
   type: ReminderType;
   message: string;
+}
+
+export interface TimerCompleteEvent {
+  completedMode: TimerState["mode"];
+  nextMode: TimerState["mode"];
+  message: string;
+}
+
+export interface ShortcutPickResult {
+  appPath: string;
+  name: string;
+  iconDataUrl?: string;
 }
 
 export interface AppData {
@@ -66,6 +80,7 @@ export const defaultData: AppData = {
     soundEnabled: true,
     quietMode: false,
     edgeSnapEnabled: true,
+    onboardingSeen: false,
     launchAtStartup: false,
     reminderIntervalMinutes: 45,
     quietWhenFullscreen: true,

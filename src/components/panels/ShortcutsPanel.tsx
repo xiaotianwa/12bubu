@@ -14,12 +14,13 @@ export function ShortcutsPanel() {
   if (loading || !data) return <div className="empty-state">布布正在找工具箱……</div>;
 
   const addShortcut = async () => {
-    const appPath = await window.bubu.pickShortcut();
-    if (!appPath) return;
+    const picked = await window.bubu.pickShortcut();
+    if (!picked) return;
     const shortcut: ShortcutItem = {
       id: crypto.randomUUID(),
-      name: shortcutNameFromPath(appPath),
-      appPath
+      name: picked.name || shortcutNameFromPath(picked.appPath),
+      appPath: picked.appPath,
+      iconDataUrl: picked.iconDataUrl
     };
     void patch((current) => ({ ...current, shortcuts: [...current.shortcuts, shortcut] }));
   };
@@ -60,7 +61,9 @@ export function ShortcutsPanel() {
               disabled={launchingId === shortcut.id}
               title={shortcut.appPath}
             >
-              <span aria-hidden="true">启</span>
+              <span className="shortcut-icon" aria-hidden="true">
+                {shortcut.iconDataUrl ? <img src={shortcut.iconDataUrl} alt="" draggable={false} /> : "启"}
+              </span>
               <strong>{shortcut.name}</strong>
               <small>{launchingId === shortcut.id ? "正在启动..." : shortcut.appPath}</small>
             </button>

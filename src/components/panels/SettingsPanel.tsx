@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { useAppData } from "../../hooks/useAppData";
 
 export function SettingsPanel() {
   const { data, loading, setData } = useAppData();
+  const [updateMessage, setUpdateMessage] = useState("");
 
   if (loading || !data) return <div className="empty-state">布布正在整理设置……</div>;
 
@@ -19,6 +21,11 @@ export function SettingsPanel() {
 
   const updateSetting = async <K extends keyof typeof data.settings>(key: K, value: (typeof data.settings)[K]) => {
     setData(await window.bubu.updateSettings({ [key]: value }));
+  };
+
+  const checkForUpdates = async () => {
+    const result = await window.bubu.checkForUpdates();
+    setUpdateMessage(result.message);
   };
 
   return (
@@ -134,10 +141,11 @@ export function SettingsPanel() {
         <button className="secondary-button" type="button" onClick={() => void window.bubu.notify("布布提醒测试成功。")}>
           测试提醒
         </button>
-        <button className="secondary-button" type="button" onClick={() => alert("第一版已预留检查更新入口，自动更新暂未接入。")}>
+        <button className="secondary-button" type="button" onClick={() => void checkForUpdates()}>
           检查更新
         </button>
       </div>
+      {updateMessage ? <p className="hint">{updateMessage}</p> : null}
     </div>
   );
 }

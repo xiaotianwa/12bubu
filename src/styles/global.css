@@ -196,6 +196,11 @@ textarea {
   outline-offset: 3px;
 }
 
+.onboarding-card button:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
 .pet-button:focus-visible {
   outline: none;
 }
@@ -901,6 +906,60 @@ textarea {
   transition: opacity 120ms ease, transform 120ms ease;
 }
 
+.onboarding-card {
+  position: absolute;
+  left: 18px;
+  top: 18px;
+  z-index: 6;
+  width: 214px;
+  padding: 12px;
+  border: 3px solid rgba(91, 56, 47, 0.82);
+  border-radius: 18px;
+  background: rgba(255, 253, 248, 0.94);
+  box-shadow: 0 16px 32px rgba(91, 56, 47, 0.16);
+}
+
+.onboarding-card strong {
+  display: block;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.onboarding-card p {
+  margin: 5px 0 10px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.onboarding-card div {
+  display: flex;
+  gap: 8px;
+}
+
+.onboarding-card button {
+  min-height: 34px;
+  padding: 7px 12px;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: #fff1a9;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 900;
+  transition: transform 140ms ease, background 160ms ease;
+}
+
+.onboarding-card button:last-child {
+  background: #fffaf0;
+}
+
+.onboarding-card button:hover,
+.onboarding-card button:focus-visible {
+  background: #dff2c7;
+}
+
 .function-wheel.is-open .wheel-button:hover .wheel-label,
 .function-wheel.is-open .wheel-button:focus-visible .wheel-label {
   opacity: 1;
@@ -1395,9 +1454,24 @@ input[type="search"] {
   opacity: 0.7;
 }
 
-.shortcut-row span {
+.shortcut-icon {
   grid-row: span 2;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 2px solid rgba(91, 56, 47, 0.22);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.62);
+  overflow: hidden;
   font-size: 22px;
+  font-weight: 900;
+}
+
+.shortcut-icon img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
 }
 
 .shortcut-row small {

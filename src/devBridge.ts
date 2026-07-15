@@ -8,6 +8,7 @@ const fallbackData: AppData = {
     soundEnabled: true,
     quietMode: false,
     edgeSnapEnabled: true,
+    onboardingSeen: false,
     launchAtStartup: false,
     reminderIntervalMinutes: 45,
     quietWhenFullscreen: true,
@@ -77,7 +78,10 @@ export function installDevBridge() {
       window.location.hash = "/";
     },
     quit: async () => undefined,
-    pickShortcut: async () => "C:\\Windows\\System32\\notepad.exe",
+    pickShortcut: async () => ({
+      appPath: "C:\\Windows\\System32\\notepad.exe",
+      name: "notepad"
+    }),
     launchShortcut: async () => ({ ok: true }),
     nudgePet: async () => undefined,
     roamPet: async () => undefined,
@@ -90,7 +94,10 @@ export function installDevBridge() {
     notify: async (message: string) => {
       console.info(`[一二布布提醒] ${message}`);
     },
+    showPetMenu: async () => undefined,
+    checkForUpdates: async () => ({ ok: true, message: "预览模式已模拟打开更新页。" }),
     onGentleReminder: () => () => undefined,
-    onTimerUpdate: () => () => undefined
+    onTimerUpdate: () => () => undefined,
+    onTimerComplete: () => () => undefined
   };
 }

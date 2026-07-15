@@ -53,6 +53,7 @@ export function PetHome() {
   const [bubble, setBubble] = useState(defaultBubble);
   const [isDragging, setIsDragging] = useState(false);
   const [quietMode, setQuietMode] = useState(false);
+  const [onboardingSeen, setOnboardingSeen] = useState(true);
   const inactivityRef = useRef<number | null>(null);
   const moodTimerRef = useRef<number | null>(null);
   const roamTimerRef = useRef<number | null>(null);
@@ -79,7 +80,9 @@ export function PetHome() {
     let alive = true;
     const syncSettings = async () => {
       const data = await window.bubu.getData();
-      if (alive) setQuietMode(data.settings.quietMode);
+      if (!alive) return;
+      setQuietMode(data.settings.quietMode);
+      setOnboardingSeen(data.settings.onboardingSeen);
     };
 
     void syncSettings();
@@ -179,6 +182,13 @@ export function PetHome() {
   }, [resetInactivity, showMood]);
 
   useEffect(() => {
+    return window.bubu.onTimerComplete(({ completedMode, message }) => {
+      resetInactivity();
+      showMood(completedMode === "focus" ? "celebrate" : "recharge", message, 4_200);
+    });
+  }, [resetInactivity, showMood]);
+
+  useEffect(() => {
     const closeWheel = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       setWheelOpen(false);
@@ -219,6 +229,13 @@ export function PetHome() {
     resetInactivity();
     setWheelOpen(false);
     showMood("idle", "好，先陪你待机。", 1_400);
+  };
+
+  const completeOnboarding = async (openSettings = false) => {
+    setOnboardingSeen(true);
+    const data = await window.bubu.updateSettings({ onboardingSeen: true });
+    setQuietMode(data.settings.quietMode);
+    if (openSettings) await window.bubu.openPanel("settings");
   };
 
   const handleLongPressStart = () => {
@@ -319,7 +336,7 @@ export function PetHome() {
         onDoubleClick={toggleWheel}
         onContextMenu={(event) => {
           event.preventDefault();
-          toggleWheel();
+          void window.bubu.showPetMenu();
         }}
       >
         <div className={`speech-bubble no-drag ${isQuietBubble ? "is-quiet" : ""}`} aria-hidden={wheelOpen}>
@@ -379,6 +396,20 @@ export function PetHome() {
         onDismiss={dismissWheel}
         onQuit={() => window.bubu.quit()}
       />
+      {!onboardingSeen ? (
+        <aside className="onboarding-card no-drag" aria-label="一二布布首次启动">
+          <strong>一二和布布到桌面啦</strong>
+          <p>先按你的节奏来。</p>
+          <div>
+            <button type="button" onClick={() => void completeOnboarding()}>
+              开始
+            </button>
+            <button type="button" onClick={() => void completeOnboarding(true)}>
+              设置
+            </button>
+          </div>
+        </aside>
+      ) : null}
     </main>
   );
 }

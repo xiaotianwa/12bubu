@@ -1,6 +1,6 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, Notification, screen, shell, Tray } from "electron";
 import path from "node:path";
-import { AppData, AppSettings, PetPosition, ReminderType } from "./types.js";
+import { AppData, AppSettings, PetPosition, ReminderType, ShortcutPickResult, TimerCompleteEvent } from "./types.js";
 import { readData, writeData } from "./store.js";
 
 const isDev = process.env.VITE_DEV_SERVER_URL || !app.isPackaged;
@@ -112,6 +112,11 @@ function clearPetMotion(): void {
   petMotionTimer = null;
 }
 
+function sendTimerComplete(event: TimerCompleteEvent): void {
+  mainWindow?.webContents.send("timer:complete", event);
+  panelWindow?.webContents.send("timer:complete", event);
+}
+
 function clampPetBounds(bounds: Electron.Rectangle, x: number, y: number): PetPosition {
   const area = screen.getDisplayMatching(bounds).workArea;
   return {
@@ -157,6 +162,26 @@ function persistPetPosition(x: number, y: number): void {
   const next = readData();
   next.settings.petPosition = { x, y };
   writeData(next);
+}
+
+function shortcutNameFromPath(appPath: string): string {
+  return path.basename(appPath).replace(/\.(exe|bat|cmd|lnk)$/i, "") || "快捷启动";
+}
+
+async function createShortcutPickResult(appPath: string): Promise<ShortcutPickResult> {
+  try {
+    const icon = await app.getFileIcon(appPath, { size: "normal" });
+    return {
+      appPath,
+      name: shortcutNameFromPath(appPath),
+      iconDataUrl: icon.isEmpty() ? undefined : icon.toDataURL()
+    };
+  } catch {
+    return {
+      appPath,
+      name: shortcutNameFromPath(appPath)
+    };
+  }
 }
 
 function movePetBy(dx: number, dy: number, persist = true): void {
@@ -296,6 +321,11 @@ function startTimerScheduler(): void {
       };
       writeData(data);
       broadcastTimer();
+      sendTimerComplete({
+        completedMode,
+        nextMode: data.timer.mode,
+        message: completedMode === "focus" ? "专注完成啦，休息一下吧。" : "休息结束，慢慢回来吧。"
+      });
       sendGentleReminder("rest", completedMode === "focus" ? "专注完成啦，休息一下吧。" : "休息结束，慢慢回来吧。");
       return;
     }
@@ -411,6 +441,56 @@ function refreshTray(): void {
   );
 }
 
+function setMainWindowVisibility(visible: boolean): void {
+  if (!mainWindow) return;
+  if (visible) mainWindow.show();
+  else mainWindow.hide();
+  refreshTray();
+}
+
+function toggleAlwaysOnTop(): void {
+  const next = readData();
+  next.settings.alwaysOnTop = !next.settings.alwaysOnTop;
+  mainWindow?.setAlwaysOnTop(next.settings.alwaysOnTop);
+  panelWindow?.setAlwaysOnTop(next.settings.alwaysOnTop);
+  writeData(next);
+  refreshTray();
+}
+
+function toggleQuietMode(): void {
+  const next = readData();
+  next.settings.quietMode = !next.settings.quietMode;
+  writeData(next);
+  refreshTray();
+}
+
+function toggleEdgeSnap(): void {
+  const next = readData();
+  next.settings.edgeSnapEnabled = !next.settings.edgeSnapEnabled;
+  writeData(next);
+  refreshTray();
+}
+
+function showPetContextMenu(): void {
+  const data = readData();
+  const menu = Menu.buildFromTemplate([
+    { label: "便签", click: () => createPanelWindow("notes") },
+    { label: "番茄钟", click: () => createPanelWindow("timer") },
+    { label: "提醒", click: () => createPanelWindow("reminders") },
+    { label: "快捷启动", click: () => createPanelWindow("shortcuts") },
+    { type: "separator" },
+    { label: data.settings.quietMode ? "关闭安静模式" : "开启安静模式", click: toggleQuietMode },
+    { label: data.settings.alwaysOnTop ? "取消置顶" : "窗口置顶", click: toggleAlwaysOnTop },
+    { label: data.settings.edgeSnapEnabled ? "关闭边缘吸附" : "开启边缘吸附", click: toggleEdgeSnap },
+    { type: "separator" },
+    { label: "设置", click: () => createPanelWindow("settings") },
+    { label: mainWindow?.isVisible() ? "隐藏桌宠" : "显示桌宠", click: () => setMainWindowVisibility(!mainWindow?.isVisible()) },
+    { label: "退出", click: () => app.quit() }
+  ]);
+
+  menu.popup({ window: mainWindow ?? undefined });
+}
+
 function updateSettings(partial: Partial<AppSettings>): AppData {
   const next = readData();
   next.settings = { ...next.settings, ...partial };
@@ -459,6 +539,7 @@ app.whenReady().then(() => {
   ipcMain.handle("window:roam", (_event, pace?: number) => roamPet(pace));
   ipcMain.handle("window:move-by", (_event, dx: number, dy: number) => movePetBy(dx, dy, false));
   ipcMain.handle("window:throw", (_event, velocityX: number, velocityY: number) => throwPet(velocityX, velocityY));
+  ipcMain.handle("pet:context-menu", () => showPetContextMenu());
   ipcMain.handle("panel:open", (_event, panel: string) => createPanelWindow(panel));
   ipcMain.handle("panel:close", () => panelWindow?.close());
   ipcMain.handle("app:quit", () => app.quit());
@@ -471,7 +552,7 @@ app.whenReady().then(() => {
         { name: "所有文件", extensions: ["*"] }
       ]
     });
-    return result.canceled ? null : result.filePaths[0];
+    return result.canceled ? null : createShortcutPickResult(result.filePaths[0]);
   });
   ipcMain.handle("shortcut:launch", async (_event, appPath: string) => {
     const error = await shell.openPath(appPath);
@@ -485,6 +566,10 @@ app.whenReady().then(() => {
     if (Notification.isSupported()) {
       new Notification({ title: "一二布布", body: message, silent: true }).show();
     }
+  });
+  ipcMain.handle("updates:check", async () => {
+    await shell.openExternal("https://github.com/xiaotianwa/12bubu/releases");
+    return { ok: true, message: "已打开 GitHub Releases，后续发布版会从这里下载。" };
   });
 });
 

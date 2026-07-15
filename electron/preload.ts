@@ -1,5 +1,15 @@
 import { contextBridge, ipcRenderer } from "electron";
-import type { AppData, AppSettings, GentleReminderEvent, NoteItem, ReminderRule, ShortcutItem, TimerState } from "./types.js";
+import type {
+  AppData,
+  AppSettings,
+  GentleReminderEvent,
+  NoteItem,
+  ReminderRule,
+  ShortcutItem,
+  ShortcutPickResult,
+  TimerCompleteEvent,
+  TimerState
+} from "./types.js";
 
 const api = {
   getData: (): Promise<AppData> => ipcRenderer.invoke("data:get"),
@@ -12,7 +22,7 @@ const api = {
     ipcRenderer.invoke("panel:open", panel),
   closePanel: (): Promise<void> => ipcRenderer.invoke("panel:close"),
   quit: (): Promise<void> => ipcRenderer.invoke("app:quit"),
-  pickShortcut: (): Promise<string | null> => ipcRenderer.invoke("shortcut:pick"),
+  pickShortcut: (): Promise<ShortcutPickResult | null> => ipcRenderer.invoke("shortcut:pick"),
   launchShortcut: (appPath: string): Promise<{ ok: boolean; error?: string }> =>
     ipcRenderer.invoke("shortcut:launch", appPath),
   nudgePet: (dx: number, dy: number): Promise<void> => ipcRenderer.invoke("window:nudge", dx, dy),
@@ -21,6 +31,8 @@ const api = {
   throwPet: (velocityX: number, velocityY: number): Promise<void> => ipcRenderer.invoke("window:throw", velocityX, velocityY),
   setStartup: (value: boolean): Promise<AppData> => ipcRenderer.invoke("startup:set", value),
   notify: (message: string): Promise<void> => ipcRenderer.invoke("notify", message),
+  showPetMenu: (): Promise<void> => ipcRenderer.invoke("pet:context-menu"),
+  checkForUpdates: (): Promise<{ ok: boolean; message: string }> => ipcRenderer.invoke("updates:check"),
   onGentleReminder: (callback: (event: GentleReminderEvent) => void): (() => void) => {
     const listener = (_event: Electron.IpcRendererEvent, payload: GentleReminderEvent) => callback(payload);
     ipcRenderer.on("reminder:gentle", listener);
@@ -30,6 +42,11 @@ const api = {
     const listener = (_event: Electron.IpcRendererEvent, timer: TimerState) => callback(timer);
     ipcRenderer.on("timer:updated", listener);
     return () => ipcRenderer.removeListener("timer:updated", listener);
+  },
+  onTimerComplete: (callback: (event: TimerCompleteEvent) => void): (() => void) => {
+    const listener = (_event: Electron.IpcRendererEvent, payload: TimerCompleteEvent) => callback(payload);
+    ipcRenderer.on("timer:complete", listener);
+    return () => ipcRenderer.removeListener("timer:complete", listener);
   }
 };
 
@@ -41,4 +58,4 @@ declare global {
   }
 }
 
-export type { AppData, AppSettings, NoteItem, ReminderRule, ShortcutItem, TimerState };
+export type { AppData, AppSettings, NoteItem, ReminderRule, ShortcutItem, ShortcutPickResult, TimerCompleteEvent, TimerState };

@@ -1,14 +1,8 @@
-import type { PanelName } from "../types";
 import type { CSSProperties } from "react";
+import type { PanelName } from "../types";
 
 export type WheelAction = "roam";
-type WheelIcon =
-  | "note"
-  | "timer"
-  | "reminder"
-  | "launch"
-  | "walk"
-  | "quit";
+type WheelIcon = "note" | "timer" | "reminder" | "launch" | "walk" | "quit";
 
 interface WheelItem {
   label: string;
@@ -24,7 +18,7 @@ const toolItems: WheelItem[] = [
   { label: "番茄钟", icon: "timer", panel: "timer", tone: "pink" },
   { label: "提醒", icon: "reminder", panel: "reminders", tone: "blue" },
   { label: "启动", icon: "launch", panel: "shortcuts", tone: "mint" },
-  { label: "玩一下", icon: "walk", action: "roam", tone: "pink" }
+  { label: "走一走", icon: "walk", action: "roam", tone: "pink" }
 ];
 
 interface FunctionWheelProps {

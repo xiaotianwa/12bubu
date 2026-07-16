@@ -4,6 +4,7 @@ import type {
   AppSettings,
   GentleReminderEvent,
   NoteItem,
+  PetMoodEvent,
   ReminderRule,
   ShortcutItem,
   ShortcutPickResult,
@@ -31,8 +32,14 @@ const api = {
   throwPet: (velocityX: number, velocityY: number): Promise<void> => ipcRenderer.invoke("window:throw", velocityX, velocityY),
   setStartup: (value: boolean): Promise<AppData> => ipcRenderer.invoke("startup:set", value),
   notify: (message: string): Promise<void> => ipcRenderer.invoke("notify", message),
+  setPetMood: (event: PetMoodEvent): Promise<void> => ipcRenderer.invoke("pet:mood", event),
   showPetMenu: (): Promise<void> => ipcRenderer.invoke("pet:context-menu"),
   checkForUpdates: (): Promise<{ ok: boolean; message: string }> => ipcRenderer.invoke("updates:check"),
+  onPetMood: (callback: (event: PetMoodEvent) => void): (() => void) => {
+    const listener = (_event: Electron.IpcRendererEvent, payload: PetMoodEvent) => callback(payload);
+    ipcRenderer.on("pet:mood", listener);
+    return () => ipcRenderer.removeListener("pet:mood", listener);
+  },
   onGentleReminder: (callback: (event: GentleReminderEvent) => void): (() => void) => {
     const listener = (_event: Electron.IpcRendererEvent, payload: GentleReminderEvent) => callback(payload);
     ipcRenderer.on("reminder:gentle", listener);

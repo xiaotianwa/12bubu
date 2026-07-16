@@ -12,7 +12,7 @@ FRAMES_ROOT = ROOT / "public" / "pet" / "frames"
 FRAME_MS = {
     "softIdle": 160,
     "note": 140,
-    "focus": 160,
+    "focus": 360,
     "reminder": 140,
     "shortcut": 140,
     "settings": 150,
@@ -25,6 +25,19 @@ FRAME_MS = {
     "ride": 98,
     "spin": 108,
     "silly": 100,
+    "buddy": 130,
+    "dance": 76,
+    "feed": 110,
+    "angry": 160,
+    "shy": 120,
+    "walk": 120,
+    "patrol": 120,
+    "slack": 180,
+    "work": 360,
+    "comfySleep": 178,
+    "recharge": 178,
+    "celebrate": 108,
+    "blink": 160,
 }
 
 ALIASES = {
@@ -57,7 +70,7 @@ def main() -> None:
     for png in FRAMES_ROOT.glob("*/*.png"):
         webp = png.with_suffix(".webp")
         with Image.open(png) as image:
-            image.save(webp, "WEBP", quality=86, method=6, lossless=False)
+            image.save(webp, "WEBP", quality=82, method=3, lossless=False)
         converted += 1
         saved_bytes += png.stat().st_size - webp.stat().st_size
 
@@ -78,6 +91,8 @@ def main() -> None:
 
     for alias, target in ALIASES.items():
         if target not in animations:
+            continue
+        if alias in animations:
             continue
         item = dict(animations[target])
         item["name"] = f"{alias} alias of {target}"

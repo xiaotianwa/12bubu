@@ -1,4 +1,4 @@
-import type { AppData, AppSettings, PanelName } from "./types";
+import type { AppData, AppSettings, PanelName, PetMoodEvent } from "./types";
 
 const now = new Date().toISOString();
 const fallbackData: AppData = {
@@ -94,8 +94,16 @@ export function installDevBridge() {
     notify: async (message: string) => {
       console.info(`[一二布布提醒] ${message}`);
     },
+    setPetMood: async (event: PetMoodEvent) => {
+      window.dispatchEvent(new CustomEvent<PetMoodEvent>("bubu:pet-mood", { detail: event }));
+    },
     showPetMenu: async () => undefined,
     checkForUpdates: async () => ({ ok: true, message: "预览模式已模拟打开更新页。" }),
+    onPetMood: (callback) => {
+      const listener = (event: Event) => callback((event as CustomEvent<PetMoodEvent>).detail);
+      window.addEventListener("bubu:pet-mood", listener);
+      return () => window.removeEventListener("bubu:pet-mood", listener);
+    },
     onGentleReminder: () => () => undefined,
     onTimerUpdate: () => () => undefined,
     onTimerComplete: () => () => undefined

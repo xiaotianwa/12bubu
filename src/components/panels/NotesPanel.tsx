@@ -27,13 +27,14 @@ export function NotesPanel() {
 
   const pinnedCount = data?.notes.filter((note) => note.pinned).length ?? 0;
 
-  if (loading || !data) return <div className="empty-state">布布正在翻便签本……</div>;
+  if (loading || !data) return <div className="empty-state">布布正在翻便签本...</div>;
 
   const addNote = () => {
     void patch((current) => ({
       ...current,
       notes: [{ ...createNote(), content: draft.trim() || "新的小便签" }, ...current.notes]
     }));
+    void window.bubu.setPetMood({ mood: "note", bubble: "便签记好啦。", durationMs: 4_200 });
     setDraft("");
   };
 
@@ -51,6 +52,7 @@ export function NotesPanel() {
       ...current,
       notes: current.notes.map((note) => (note.id === id ? { ...note, pinned: !note.pinned } : note))
     }));
+    void window.bubu.setPetMood({ mood: "note", bubble: "便签位置调整好啦。", durationMs: 3_200 });
   };
 
   const deleteNote = (id: string) => {
@@ -70,12 +72,14 @@ export function NotesPanel() {
               placeholder="输入关键词"
             />
           </label>
-          <span className="count-pill">{data.notes.length} 条 / {pinnedCount} 置顶</span>
+          <span className="count-pill">
+            {data.notes.length} 条 / {pinnedCount} 置顶
+          </span>
         </div>
         <textarea
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
-          placeholder="写点想记住的小事……"
+          placeholder="写点想记住的小事..."
           rows={3}
         />
         <button className="primary-button" type="button" onClick={addNote}>

@@ -11,7 +11,7 @@ export function ShortcutsPanel() {
   const [error, setError] = useState("");
   const [launchingId, setLaunchingId] = useState<string | null>(null);
 
-  if (loading || !data) return <div className="empty-state">布布正在找工具箱……</div>;
+  if (loading || !data) return <div className="empty-state">布布正在找工具箱...</div>;
 
   const addShortcut = async () => {
     const picked = await window.bubu.pickShortcut();
@@ -23,12 +23,14 @@ export function ShortcutsPanel() {
       iconDataUrl: picked.iconDataUrl
     };
     void patch((current) => ({ ...current, shortcuts: [...current.shortcuts, shortcut] }));
+    void window.bubu.setPetMood({ mood: "shortcut", bubble: "入口放进工具箱啦。", durationMs: 4_200 });
   };
 
   const launch = async (appPath: string) => {
     const target = data.shortcuts.find((shortcut) => shortcut.appPath === appPath);
     setLaunchingId(target?.id ?? null);
     try {
+      void window.bubu.setPetMood({ mood: "shortcut", bubble: "小车发动，正在启动。", durationMs: 5_200 });
       const result = await window.bubu.launchShortcut(appPath);
       setError(result.ok ? "" : result.error ?? "启动失败");
     } catch {

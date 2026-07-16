@@ -78,65 +78,65 @@ function fallbackAnimation(
 }
 
 const fallbackAnimations: Partial<Record<PetMood, FrameAnimation>> = {
-  idle: fallbackAnimation("idle", "idle", 28, 80, "一二和布布待机", "asset-home"),
-  blink: fallbackAnimation("idle", "idle", 28, 80, "一二和布布眨眼", "asset-home"),
-  buddy: fallbackAnimation("idle", "idle", 28, 80, "一二和布布贴贴", "asset-home"),
-  work: fallbackAnimation("idle", "idle", 28, 80, "一二和布布陪你工作", "asset-home"),
-  slack: fallbackAnimation("idle", "idle", 28, 80, "一二和布布安静待机", "asset-home"),
-  note: fallbackAnimation("idle", "idle", 28, 80, "一二和布布便签状态", "asset-home"),
-  focus: fallbackAnimation("idle", "idle", 28, 80, "一二和布布专注状态", "asset-home"),
-  reminder: fallbackAnimation("idle", "idle", 28, 80, "一二和布布提醒状态", "asset-home"),
-  settings: fallbackAnimation("idle", "idle", 28, 80, "一二和布布设置状态", "asset-home"),
-  drag: fallbackAnimation("idle", "idle", 28, 80, "一二和布布移动中", "asset-home"),
-  happy: fallbackAnimation("happy", "happy", 16, 76, "一二和布布开心跳舞"),
-  dance: fallbackAnimation("happy", "happy", 16, 76, "一二和布布跳舞"),
-  celebrate: fallbackAnimation("happy", "happy", 16, 76, "一二和布布庆祝"),
-  bite: fallbackAnimation("bite", "bite", 17, 129, "一二咬布布互动"),
-  feed: fallbackAnimation("bite", "bite", 17, 129, "一二和布布互动"),
-  eyeRoll: fallbackAnimation("eyeRoll", "eyeRoll", 3, 60, "一二白眼表情"),
-  angry: fallbackAnimation("eyeRoll", "eyeRoll", 3, 60, "一二有点不开心"),
-  sleep: fallbackAnimation("sleep", "sleep", 5, 178, "一二舒服睡觉"),
-  comfySleep: fallbackAnimation("sleep", "sleep", 5, 178, "一二舒服睡觉"),
-  recharge: fallbackAnimation("sleep", "sleep", 5, 178, "一二和布布充电休息"),
-  walk: fallbackAnimation("walkDog", "walkDog", 16, 100, "一二遛布布"),
+  idle: fallbackAnimation("softIdle", "softIdle", 18, 160, "一二待机"),
+  blink: fallbackAnimation("blink", "blink", 18, 160, "一二眨眼待机"),
+  buddy: fallbackAnimation("buddy", "buddy", 8, 130, "一二和布布贴贴"),
+  work: fallbackAnimation("work", "work", 2, 360, "一二专注工作"),
+  slack: fallbackAnimation("slack", "slack", 6, 180, "一二放空休息"),
+  note: fallbackAnimation("note", "note", 20, 140, "一二记录便签"),
+  focus: fallbackAnimation("focus", "focus", 2, 360, "一二看书专注"),
+  reminder: fallbackAnimation("reminder", "reminder", 6, 140, "一二举牌提醒"),
+  settings: fallbackAnimation("settings", "settings", 6, 150, "一二整理设置"),
+  drag: fallbackAnimation("softIdle", "softIdle", 18, 160, "一二移动中"),
+  happy: fallbackAnimation("happy", "happy", 4, 76, "一二开心"),
+  dance: fallbackAnimation("dance", "dance", 16, 76, "一二和布布跳舞"),
+  celebrate: fallbackAnimation("celebrate", "celebrate", 28, 108, "一二和布布庆祝"),
+  bite: fallbackAnimation("bite", "bite", 17, 129, "一二咬布布"),
+  feed: fallbackAnimation("feed", "feed", 26, 110, "一二吃东西"),
+  eyeRoll: fallbackAnimation("eyeRoll", "eyeRoll", 3, 60, "一二白眼"),
+  angry: fallbackAnimation("angry", "angry", 2, 160, "一二生气"),
+  sleep: fallbackAnimation("sleep", "sleep", 6, 178, "一二睡觉"),
+  comfySleep: fallbackAnimation("comfySleep", "comfySleep", 6, 178, "一二舒服睡觉"),
+  recharge: fallbackAnimation("recharge", "recharge", 6, 178, "一二休息充电"),
+  walk: fallbackAnimation("walk", "walk", 8, 120, "一二走路"),
   walkDog: fallbackAnimation("walkDog", "walkDog", 16, 100, "一二遛布布"),
-  patrol: fallbackAnimation("walkDog", "walkDog", 16, 100, "一二和布布巡逻"),
-  ride: fallbackAnimation("ride", "ride", 5, 98, "一二骑着布布车"),
-  shortcut: fallbackAnimation("ride", "ride", 5, 98, "一二和布布启动程序"),
-  spin: fallbackAnimation("spin", "spin", 8, 108, "布布和一二转圈", "asset-tiny-source"),
-  silly: fallbackAnimation("silly", "silly", 3, 100, "一二和布布鬼脸"),
-  shy: fallbackAnimation("silly", "silly", 3, 100, "一二和布布鬼脸")
+  patrol: fallbackAnimation("patrol", "patrol", 8, 120, "一二巡逻"),
+  ride: fallbackAnimation("ride", "ride", 4, 98, "一二开车"),
+  shortcut: fallbackAnimation("shortcut", "shortcut", 4, 140, "一二快捷启动"),
+  spin: fallbackAnimation("spin", "spin", 28, 108, "一二和布布转圈"),
+  silly: fallbackAnimation("silly", "silly", 3, 100, "一二做鬼脸"),
+  shy: fallbackAnimation("shy", "shy", 24, 120, "一二害羞")
 };
 
 const moodAlt: Partial<Record<PetMood, string>> = {
-  idle: "一二和布布待机",
-  blink: "一二和布布眨眼",
+  idle: "一二待机",
+  blink: "一二眨眼待机",
   buddy: "一二和布布贴贴",
-  work: "一二和布布陪你工作",
-  slack: "一二和布布安静待机",
-  note: "一二和布布便签状态",
-  focus: "一二和布布专注状态",
-  reminder: "一二和布布提醒状态",
-  settings: "一二和布布设置状态",
-  drag: "一二和布布移动中",
-  happy: "一二和布布开心",
+  work: "一二专注工作",
+  slack: "一二放空休息",
+  note: "一二记录便签",
+  focus: "一二看书专注",
+  reminder: "一二举牌提醒",
+  settings: "一二整理设置",
+  drag: "一二移动中",
+  happy: "一二开心",
   dance: "一二和布布跳舞",
   celebrate: "一二和布布庆祝",
-  bite: "一二咬布布互动",
-  feed: "一二和布布互动",
-  eyeRoll: "一二白眼表情",
-  angry: "一二有点不开心",
-  sleep: "一二舒服睡觉",
+  bite: "一二咬布布",
+  feed: "一二吃东西",
+  eyeRoll: "一二白眼",
+  angry: "一二生气",
+  sleep: "一二睡觉",
   comfySleep: "一二舒服睡觉",
-  recharge: "一二和布布充电休息",
-  walk: "一二遛布布",
+  recharge: "一二休息充电",
+  walk: "一二走路",
   walkDog: "一二遛布布",
-  patrol: "一二和布布巡逻",
-  ride: "一二骑着布布车",
-  shortcut: "一二和布布启动程序",
-  spin: "布布和一二转圈",
-  silly: "一二和布布鬼脸",
-  shy: "一二和布布鬼脸"
+  patrol: "一二巡逻",
+  ride: "一二开车",
+  shortcut: "一二快捷启动",
+  spin: "一二和布布转圈",
+  silly: "一二做鬼脸",
+  shy: "一二害羞"
 };
 
 let manifestCache: FrameManifest | null = null;
@@ -160,7 +160,7 @@ function fromManifest(mood: PetMood, manifest: FrameManifest | null): FrameAnima
   if (!item?.frames?.length) return null;
 
   return {
-    alt: moodAlt[mood] ?? "一二和布布",
+    alt: moodAlt[mood] ?? "一二布布",
     frameMs: item.frameMs,
     assetClass: "asset-frame-sequence",
     frames: item.frames
@@ -180,7 +180,7 @@ function FrameSequenceAsset({ animation, assetKey }: { animation: FrameAnimation
     return () => window.clearInterval(timer);
   }, [animation.frameMs, animation.frames.length, assetKey]);
 
-  const src = animation.frames[frameIndex];
+  const src = animation.frames[frameIndex % animation.frames.length];
   const fallbackSrc = src.endsWith(".webp") ? src.replace(/\.webp$/u, ".png") : src;
 
   return (
@@ -219,7 +219,7 @@ export function PetSprite({ mood, compact = false }: PetSpriteProps) {
     <span
       className={`pet-sprite pet-official-wrap ${assetClass} ${moodClass[mood]} ${compact ? "is-compact" : ""}`}
       role="img"
-      aria-label={animation?.alt ?? "一二和布布"}
+      aria-label={animation?.alt ?? "一二布布"}
     >
       <span className="pet-ground-shadow" aria-hidden="true" />
       {animation ? <FrameSequenceAsset animation={animation} assetKey={mood} /> : null}

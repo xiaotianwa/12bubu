@@ -15,8 +15,8 @@ const panelTitles: Record<string, string> = {
 };
 
 const panelDescriptions: Record<string, string> = {
-  notes: "随手记下桌面上的小事，置顶的内容会排在最前面。",
-  timer: "专注和休息会在后台继续计时，关掉面板也不会丢。",
+  notes: "随手记下桌面上的小事，置顶内容会排在最前面。",
+  timer: "专注和休息会在后台继续计时，关闭面板也不会丢。",
   reminders: "喝水和休息提醒会温柔冒泡，不抢走你的窗口焦点。",
   shortcuts: "把常用程序放进布布的小工具箱，一点就启动。",
   settings: "调整置顶、透明度和开机启动，让布布更贴合你的桌面。"
@@ -47,7 +47,7 @@ export function PanelShell({ panel }: { panel: string }) {
         <div className="panel-heading">
           <span className="panel-kicker">一二布布</span>
           <h1 id="panel-title">{title}</h1>
-          <p>{panelDescriptions[panel] ?? "挑一个小工具，让布布陪你处理。 "}</p>
+          <p>{panelDescriptions[panel] ?? "挑一个小工具，让布布陪你处理。"}</p>
           <div className="panel-status-strip" aria-label="面板状态">
             <span>{panelStatus[panel] ?? "准备好了"}</span>
             <span>本地数据</span>
@@ -57,7 +57,7 @@ export function PanelShell({ panel }: { panel: string }) {
           <PetSprite mood={panelMood[panel] ?? "idle"} compact />
         </div>
         <button className="icon-button no-drag" type="button" onClick={() => window.bubu.closePanel()} aria-label="关闭">
-          ×
+          x
         </button>
       </header>
       <section className="panel-content no-drag">

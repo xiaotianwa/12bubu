@@ -1,6 +1,6 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, Notification, screen, shell, Tray } from "electron";
 import path from "node:path";
-import { AppData, AppSettings, PetPosition, ReminderType, ShortcutPickResult, TimerCompleteEvent } from "./types.js";
+import { AppData, AppSettings, PetMoodEvent, PetPosition, ReminderType, ShortcutPickResult, TimerCompleteEvent } from "./types.js";
 import { readData, writeData } from "./store.js";
 
 const isDev = process.env.VITE_DEV_SERVER_URL || !app.isPackaged;
@@ -539,6 +539,9 @@ app.whenReady().then(() => {
   ipcMain.handle("window:roam", (_event, pace?: number) => roamPet(pace));
   ipcMain.handle("window:move-by", (_event, dx: number, dy: number) => movePetBy(dx, dy, false));
   ipcMain.handle("window:throw", (_event, velocityX: number, velocityY: number) => throwPet(velocityX, velocityY));
+  ipcMain.handle("pet:mood", (_event, payload: PetMoodEvent) => {
+    mainWindow?.webContents.send("pet:mood", payload);
+  });
   ipcMain.handle("pet:context-menu", () => showPetContextMenu());
   ipcMain.handle("panel:open", (_event, panel: string) => createPanelWindow(panel));
   ipcMain.handle("panel:close", () => panelWindow?.close());

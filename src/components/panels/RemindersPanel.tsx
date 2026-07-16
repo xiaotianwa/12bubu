@@ -14,7 +14,7 @@ const messages: Record<ReminderType, string> = {
 export function RemindersPanel() {
   const { data, loading, patch } = useAppData();
 
-  if (loading || !data) return <div className="empty-state">布布正在调提醒铃……</div>;
+  if (loading || !data) return <div className="empty-state">布布正在调提醒铃...</div>;
 
   const enabledCount = data.reminders.filter((rule) => rule.enabled).length;
 
@@ -40,6 +40,11 @@ export function RemindersPanel() {
                   ...current,
                   reminders: current.reminders.map((item) => (item.id === rule.id ? { ...item, enabled } : item))
                 }));
+                void window.bubu.setPetMood({
+                  mood: "reminder",
+                  bubble: enabled ? "提醒已开启。" : "提醒先收起来。",
+                  durationMs: 3_200
+                });
               }}
             />
             <span />
@@ -47,7 +52,10 @@ export function RemindersPanel() {
           <button
             className="inline-action"
             type="button"
-            onClick={() => void window.bubu.notify(messages[rule.type])}
+            onClick={() => {
+              void window.bubu.notify(messages[rule.type]);
+              void window.bubu.setPetMood({ mood: "reminder", bubble: messages[rule.type], durationMs: 5_200 });
+            }}
             disabled={!rule.enabled}
           >
             立即提醒

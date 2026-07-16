@@ -89,6 +89,12 @@ export interface TimerCompleteEvent {
   message: string;
 }
 
+export interface PetMoodEvent {
+  mood: PetMood;
+  bubble: string;
+  durationMs?: number;
+}
+
 export interface ShortcutPickResult {
   appPath: string;
   name: string;
@@ -121,8 +127,10 @@ export interface BubuApi {
   throwPet: (velocityX: number, velocityY: number) => Promise<void>;
   setStartup: (value: boolean) => Promise<AppData>;
   notify: (message: string) => Promise<void>;
+  setPetMood: (event: PetMoodEvent) => Promise<void>;
   showPetMenu: () => Promise<void>;
   checkForUpdates: () => Promise<{ ok: boolean; message: string }>;
+  onPetMood: (callback: (event: PetMoodEvent) => void) => () => void;
   onGentleReminder: (callback: (event: GentleReminderEvent) => void) => () => void;
   onTimerUpdate: (callback: (timer: TimerState) => void) => () => void;
   onTimerComplete: (callback: (event: TimerCompleteEvent) => void) => () => void;

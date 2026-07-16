@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { PanelName, PetMood } from "../types";
+import type { AppData, PanelName, PetMood } from "../types";
 import { PetSprite } from "./PetSprite";
 import { FunctionWheel, type WheelAction } from "./FunctionWheel";
 
 const inactiveSleepMs = 90_000;
-const ambientActionMs = 18_000;
+const ambientActionMs = 30_000;
 const longPressMs = 620;
-const interactionMoodMs = 2_600;
+const interactionMoodMs = 5_200;
 const dragStartThresholdPx = 5;
-const defaultBubble = "右侧小点打开工具";
+const defaultBubble = "";
 
 const panelMood: Record<PanelName, PetMood> = {
   notes: "note",
@@ -19,10 +19,10 @@ const panelMood: Record<PanelName, PetMood> = {
 };
 
 const panelBubble: Record<PanelName, string> = {
-  notes: "便签本打开啦，一二帮你抱着。",
-  timer: "进入专注时间，一二陪你坐稳。",
-  reminders: "喝水和休息，我会轻轻提醒。",
-  shortcuts: "小车发动，常用程序交给布布。",
+  notes: "便签打开啦，一二帮你记着。",
+  timer: "番茄钟打开啦，一二进入专注状态。",
+  reminders: "提醒打开啦，布布会轻轻举牌。",
+  shortcuts: "启动工具箱打开啦。",
   settings: "设置小抽屉打开咯。"
 };
 
@@ -34,13 +34,10 @@ interface AmbientAction {
 }
 
 const ambientActions: AmbientAction[] = [
-  { mood: "blink", bubble: "我在桌面上守着。", durationMs: 1_100 },
-  { mood: "buddy", bubble: "一二和布布贴贴待机。", durationMs: 2_300 },
-  { mood: "walkDog", bubble: "出去溜一小圈。", durationMs: 2_300, roam: true },
-  { mood: "ride", bubble: "布布小车慢慢开。", durationMs: 1_900, roam: true },
-  { mood: "spin", bubble: "转一圈，继续陪你。", durationMs: 1_500 },
-  { mood: "comfySleep", bubble: "偷偷打个小盹。", durationMs: 2_400 },
-  { mood: "celebrate", bubble: "今天也要好耶一下。", durationMs: 2_000 }
+  { mood: "blink", bubble: "", durationMs: 1_300 },
+  { mood: "buddy", bubble: "一二和布布贴贴待机。", durationMs: 2_400 },
+  { mood: "slack", bubble: "休息一下也没关系。", durationMs: 2_200 },
+  { mood: "comfySleep", bubble: "偷偷打个小盹。", durationMs: 2_600 }
 ];
 
 function randomItem<T>(items: T[]): T {
@@ -58,6 +55,7 @@ export function PetHome() {
   const moodTimerRef = useRef<number | null>(null);
   const roamTimerRef = useRef<number | null>(null);
   const longPressTimerRef = useRef<number | null>(null);
+  const timerMoodRef = useRef<PetMood | null>(null);
   const moodRef = useRef<PetMood>("idle");
   const dragRef = useRef<{
     pointerId: number;
@@ -82,7 +80,7 @@ export function PetHome() {
       const data = await window.bubu.getData();
       if (!alive) return;
       setQuietMode(data.settings.quietMode);
-      setOnboardingSeen(data.settings.onboardingSeen);
+      setOnboardingSeen(true);
     };
 
     void syncSettings();
@@ -146,7 +144,8 @@ export function PetHome() {
       showMood("idle", "醒啦，继续陪你。", 1_600);
     }
     inactivityRef.current = window.setTimeout(() => {
-      showMood("sleep", "呼……进入省电睡觉模式。", 0);
+      if (moodRef.current !== "idle") return;
+      showMood("sleep", "进入省电睡觉模式。", 0);
     }, inactiveSleepMs);
   }, [showMood]);
 
@@ -159,6 +158,31 @@ export function PetHome() {
       if (inactivityRef.current) window.clearTimeout(inactivityRef.current);
     };
   }, [resetInactivity]);
+
+  useEffect(() => {
+    return window.bubu.onPetMood(({ mood: nextMood, bubble: nextBubble, durationMs }) => {
+      resetInactivity();
+      showMood(nextMood, nextBubble, durationMs ?? 5_200);
+    });
+  }, [resetInactivity, showMood]);
+
+  useEffect(() => {
+    const applyTimerMood = (timer: AppData["timer"]) => {
+      if (timer.running) {
+        const nextMood: PetMood = timer.mode === "focus" ? "focus" : "recharge";
+        timerMoodRef.current = nextMood;
+        if (moodRef.current !== nextMood) showMood(nextMood, "", 0);
+        return;
+      }
+
+      const previousTimerMood = timerMoodRef.current;
+      timerMoodRef.current = null;
+      if (previousTimerMood && moodRef.current === previousTimerMood) showMood("idle", defaultBubble, 0);
+    };
+
+    void window.bubu.getData().then((data) => applyTimerMood(data.timer));
+    return window.bubu.onTimerUpdate(applyTimerMood);
+  }, [showMood]);
 
   useEffect(() => {
     const id = window.setInterval(() => {
@@ -222,13 +246,13 @@ export function PetHome() {
   const toggleWheel = () => {
     resetInactivity();
     setWheelOpen((value) => !value);
-    showMood("idle", wheelOpen ? "小工具收起来啦。" : "小工具展开，选一个吧。", 1_800);
+    showMood("idle", wheelOpen ? "" : "小工具展开，选一个吧。", 1_800);
   };
 
   const dismissWheel = () => {
     resetInactivity();
     setWheelOpen(false);
-    showMood("idle", "好，先陪你待机。", 1_400);
+    showMood("idle", "", 1_000);
   };
 
   const completeOnboarding = async (openSettings = false) => {
@@ -243,7 +267,7 @@ export function PetHome() {
     clearLongPressTimer();
     longPressTimerRef.current = window.setTimeout(() => {
       setWheelOpen(true);
-      showMood("idle", "长按召唤小工具。", 1_800);
+      showMood("idle", "小工具展开，选一个吧。", 1_800);
       longPressTimerRef.current = null;
     }, longPressMs);
   };
@@ -285,7 +309,7 @@ export function PetHome() {
     suppressClickRef.current = true;
     clearLongPressTimer();
     setIsDragging(true);
-    if (moodRef.current !== "drag") showMood("drag", "跟着你移动。", 0);
+    if (moodRef.current !== "drag") showMood("drag", "", 0);
     void window.bubu.movePet(dx, dy);
   };
 
@@ -297,7 +321,7 @@ export function PetHome() {
     setIsDragging(false);
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
     if (drag.moved) {
-      showMood("idle", "站稳啦。", 1_100);
+      showMood("idle", "", 1_100);
       void window.bubu.throwPet(drag.velocityX, drag.velocityY);
       window.setTimeout(() => {
         suppressClickRef.current = false;
@@ -316,7 +340,7 @@ export function PetHome() {
     void window.bubu.savePetPosition();
   };
 
-  const isQuietBubble = mood === "idle" && bubble === defaultBubble;
+  const hasBubble = bubble.trim().length > 0 && !wheelOpen;
 
   return (
     <main className={`pet-stage ${wheelOpen ? "has-wheel" : ""} ${quietMode ? "is-quiet-mode" : ""}`}>
@@ -339,9 +363,7 @@ export function PetHome() {
           void window.bubu.showPetMenu();
         }}
       >
-        <div className={`speech-bubble no-drag ${isQuietBubble ? "is-quiet" : ""}`} aria-hidden={wheelOpen}>
-          {bubble}
-        </div>
+        {hasBubble ? <div className="speech-bubble no-drag">{bubble}</div> : null}
         <button
           className="pet-button no-drag"
           aria-label="一二布布"

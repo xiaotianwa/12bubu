@@ -5,39 +5,52 @@ export function SettingsPanel() {
   const { data, loading, setData } = useAppData();
   const [updateMessage, setUpdateMessage] = useState("");
 
-  if (loading || !data) return <div className="empty-state">布布正在整理设置……</div>;
+  if (loading || !data) return <div className="empty-state">布布正在整理设置...</div>;
+
+  const showSettingsMood = (message: string) => {
+    void window.bubu.setPetMood({ mood: "settings", bubble: message, durationMs: 3_600 });
+  };
 
   const updateAlwaysOnTop = async (alwaysOnTop: boolean) => {
     setData(await window.bubu.setAlwaysOnTop(alwaysOnTop));
+    showSettingsMood(alwaysOnTop ? "窗口已置顶。" : "窗口取消置顶。");
   };
 
   const updateOpacity = async (opacity: number) => {
     setData(await window.bubu.setOpacity(opacity));
+    showSettingsMood("透明度调整好啦。");
   };
 
   const updateStartup = async (launchAtStartup: boolean) => {
     setData(await window.bubu.setStartup(launchAtStartup));
+    showSettingsMood(launchAtStartup ? "开机启动已开启。" : "开机启动已关闭。");
   };
 
-  const updateSetting = async <K extends keyof typeof data.settings>(key: K, value: (typeof data.settings)[K]) => {
+  const updateSetting = async <K extends keyof typeof data.settings>(
+    key: K,
+    value: (typeof data.settings)[K],
+    message: string
+  ) => {
     setData(await window.bubu.updateSettings({ [key]: value }));
+    showSettingsMood(message);
   };
 
   const checkForUpdates = async () => {
     const result = await window.bubu.checkForUpdates();
     setUpdateMessage(result.message);
+    showSettingsMood("正在检查更新。");
   };
 
   return (
     <div className="stack">
       <div className="info-strip">
         <strong>桌宠显示偏好</strong>
-        <span>大部分设置保存后会立刻应用到当前窗口。</span>
+        <span>设置保存后会立刻应用到当前窗口。</span>
       </div>
       <article className="setting-card">
         <div>
           <strong>窗口置顶</strong>
-          <p>让布布一直趴在桌面上。</p>
+          <p>让布布一直待在桌面上。</p>
         </div>
         <label className="switch">
           <input
@@ -76,7 +89,7 @@ export function SettingsPanel() {
           <input
             type="checkbox"
             checked={data.settings.soundEnabled}
-            onChange={(event) => void updateSetting("soundEnabled", event.target.checked)}
+            onChange={(event) => void updateSetting("soundEnabled", event.target.checked, "音效设置已更新。")}
           />
           <span />
         </label>
@@ -90,7 +103,13 @@ export function SettingsPanel() {
           <input
             type="checkbox"
             checked={data.settings.quietMode}
-            onChange={(event) => void updateSetting("quietMode", event.target.checked)}
+            onChange={(event) =>
+              void updateSetting(
+                "quietMode",
+                event.target.checked,
+                event.target.checked ? "安静模式已开启。" : "安静模式已关闭。"
+              )
+            }
           />
           <span />
         </label>
@@ -104,7 +123,7 @@ export function SettingsPanel() {
           <input
             type="checkbox"
             checked={data.settings.edgeSnapEnabled}
-            onChange={(event) => void updateSetting("edgeSnapEnabled", event.target.checked)}
+            onChange={(event) => void updateSetting("edgeSnapEnabled", event.target.checked, "边缘吸附已更新。")}
           />
           <span />
         </label>
@@ -132,13 +151,22 @@ export function SettingsPanel() {
           <input
             type="checkbox"
             checked={data.settings.quietWhenFullscreen}
-            onChange={(event) => void updateSetting("quietWhenFullscreen", event.target.checked)}
+            onChange={(event) =>
+              void updateSetting("quietWhenFullscreen", event.target.checked, "全屏静默设置已更新。")
+            }
           />
           <span />
         </label>
       </article>
       <div className="button-row">
-        <button className="secondary-button" type="button" onClick={() => void window.bubu.notify("布布提醒测试成功。")}>
+        <button
+          className="secondary-button"
+          type="button"
+          onClick={() => {
+            void window.bubu.notify("布布提醒测试成功。");
+            void window.bubu.setPetMood({ mood: "reminder", bubble: "提醒测试成功。", durationMs: 4_200 });
+          }}
+        >
           测试提醒
         </button>
         <button className="secondary-button" type="button" onClick={() => void checkForUpdates()}>

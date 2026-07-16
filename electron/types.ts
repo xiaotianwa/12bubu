@@ -1,4 +1,33 @@
 export type ReminderType = "water" | "rest";
+export type PetMood =
+  | "idle"
+  | "blink"
+  | "walk"
+  | "sleep"
+  | "drag"
+  | "happy"
+  | "note"
+  | "focus"
+  | "reminder"
+  | "shortcut"
+  | "settings"
+  | "feed"
+  | "buddy"
+  | "angry"
+  | "shy"
+  | "bite"
+  | "dance"
+  | "eyeRoll"
+  | "comfySleep"
+  | "walkDog"
+  | "ride"
+  | "spin"
+  | "silly"
+  | "work"
+  | "slack"
+  | "recharge"
+  | "patrol"
+  | "celebrate";
 
 export interface PetPosition {
   x: number;
@@ -57,6 +86,12 @@ export interface TimerCompleteEvent {
   completedMode: TimerState["mode"];
   nextMode: TimerState["mode"];
   message: string;
+}
+
+export interface PetMoodEvent {
+  mood: PetMood;
+  bubble: string;
+  durationMs?: number;
 }
 
 export interface ShortcutPickResult {

@@ -28,11 +28,17 @@ export function TimerPanel() {
 
   if (loading || !data) return <div className="empty-state">一二正在摆好小闹钟...</div>;
 
+  const modeLabel = data.timer.mode === "focus" ? "专注" : "休息";
   const totalSeconds = data.timer.mode === "focus" ? focusSeconds : breakSeconds;
   const elapsedSeconds = Math.max(0, totalSeconds - data.timer.remainingSeconds);
 
   const setRunning = (running: boolean) => {
     void patch((current) => ({ ...current, timer: { ...current.timer, running } }));
+    void window.bubu.setPetMood({
+      mood: running ? (data.timer.mode === "focus" ? "focus" : "recharge") : "idle",
+      bubble: running ? `${modeLabel}开始，一二陪你。` : "番茄钟暂停啦。",
+      durationMs: running ? 0 : 2_400
+    });
   };
 
   const reset = () => {
@@ -40,15 +46,23 @@ export function TimerPanel() {
       ...current,
       timer: { mode: "focus", remainingSeconds: focusSeconds, running: false }
     }));
+    void window.bubu.setPetMood({ mood: "idle", bubble: "番茄钟已重置。", durationMs: 2_400 });
   };
 
   const switchMode = () => {
-    void patch((current) => {
-      const mode = current.timer.mode === "focus" ? "break" : "focus";
-      return {
-        ...current,
-        timer: { mode, remainingSeconds: mode === "focus" ? focusSeconds : breakSeconds, running: false }
-      };
+    const nextMode = data.timer.mode === "focus" ? "break" : "focus";
+    void patch((current) => ({
+      ...current,
+      timer: {
+        mode: nextMode,
+        remainingSeconds: nextMode === "focus" ? focusSeconds : breakSeconds,
+        running: false
+      }
+    }));
+    void window.bubu.setPetMood({
+      mood: nextMode === "focus" ? "focus" : "recharge",
+      bubble: nextMode === "focus" ? "切到专注模式。" : "切到休息模式。",
+      durationMs: 3_200
     });
   };
 
@@ -61,25 +75,30 @@ export function TimerPanel() {
   };
 
   return (
-    <div className="timer-panel">
-      <div className="timer-summary" aria-live="polite">
-        <span>{data.timer.running ? "正在计时" : "已暂停"}</span>
-        <strong>{data.timer.mode === "focus" ? "专注 25 分钟" : "休息 5 分钟"}</strong>
-        <span>已进行 {formatTime(elapsedSeconds)}</span>
-      </div>
-      <div className="timer-ring" style={{ "--progress": `${progress * 360}deg` } as CSSProperties}>
-        <div>
-          <span>{data.timer.mode === "focus" ? "专注中" : "休息中"}</span>
-          <strong>{formatTime(data.timer.remainingSeconds)}</strong>
+    <div className={`timer-panel ${data.timer.running ? "is-running" : ""}`}>
+      <section className="timer-hero" aria-live="polite">
+        <div className="timer-ring" style={{ "--progress": `${progress * 360}deg` } as CSSProperties}>
+          <div>
+            <span>{data.timer.running ? `${modeLabel}中` : `${modeLabel}待机`}</span>
+            <strong>{formatTime(data.timer.remainingSeconds)}</strong>
+          </div>
         </div>
-      </div>
-      <div className="button-row">
-        <button className="primary-button" type="button" onClick={() => setRunning(!data.timer.running)}>
-          {data.timer.running ? "暂停" : "开始"}
-        </button>
-        <button type="button" onClick={reset}>重置</button>
-        <button type="button" onClick={switchMode}>切换模式</button>
-      </div>
+        <div className="timer-side">
+          <span className={`timer-status-pill ${data.timer.running ? "is-live" : ""}`}>
+            {data.timer.running ? "正在计时" : "已暂停"}
+          </span>
+          <strong>{modeLabel} {data.timer.mode === "focus" ? "25" : "5"} 分钟</strong>
+          <p>已进行 {formatTime(elapsedSeconds)}</p>
+          <div className="button-row timer-actions">
+            <button className="primary-button" type="button" onClick={() => setRunning(!data.timer.running)}>
+              {data.timer.running ? "暂停" : "开始"}
+            </button>
+            <button type="button" onClick={reset}>
+              重置
+            </button>
+          </div>
+        </div>
+      </section>
       <div className="button-row button-row-subtle" aria-label="调整剩余时间">
         <button type="button" onClick={() => adjustMinutes(-5)} disabled={data.timer.remainingSeconds <= 5 * 60}>
           -5 分钟
@@ -87,8 +106,11 @@ export function TimerPanel() {
         <button type="button" onClick={() => adjustMinutes(5)} disabled={data.timer.remainingSeconds >= totalSeconds}>
           +5 分钟
         </button>
+        <button type="button" onClick={switchMode}>
+          切换模式
+        </button>
       </div>
-      <p className="hint">计时由桌宠在后台持续维护，关闭此面板后也不会暂停。</p>
+      <p className="hint">关闭面板后也会继续计时；开始、暂停和切换模式都会同步桌宠动画。</p>
     </div>
   );
 }

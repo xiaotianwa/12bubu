@@ -8,6 +8,16 @@
   "fallbackFormat": "png",
   "notes": "Optimized WebP frames generated from retained PNG extracts. PNG frames remain for development fallback and source review.",
   "animations": {
+    "angry": {
+      "name": "angry optimized WebP frames",
+      "frameMs": 160,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/angry/angry_000.webp",
+        "pet/frames/angry/angry_001.webp"
+      ]
+    },
     "bite": {
       "name": "bite optimized WebP frames",
       "frameMs": 129,
@@ -33,6 +43,122 @@
         "pet/frames/bite/bite_016.webp"
       ]
     },
+    "blink": {
+      "name": "blink optimized WebP frames",
+      "frameMs": 160,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/blink/blink_000.webp",
+        "pet/frames/blink/blink_001.webp",
+        "pet/frames/blink/blink_002.webp",
+        "pet/frames/blink/blink_003.webp",
+        "pet/frames/blink/blink_004.webp",
+        "pet/frames/blink/blink_005.webp",
+        "pet/frames/blink/blink_006.webp",
+        "pet/frames/blink/blink_007.webp",
+        "pet/frames/blink/blink_008.webp",
+        "pet/frames/blink/blink_009.webp",
+        "pet/frames/blink/blink_010.webp",
+        "pet/frames/blink/blink_011.webp",
+        "pet/frames/blink/blink_012.webp",
+        "pet/frames/blink/blink_013.webp",
+        "pet/frames/blink/blink_014.webp",
+        "pet/frames/blink/blink_015.webp",
+        "pet/frames/blink/blink_016.webp",
+        "pet/frames/blink/blink_017.webp"
+      ]
+    },
+    "buddy": {
+      "name": "buddy optimized WebP frames",
+      "frameMs": 130,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/buddy/buddy_000.webp",
+        "pet/frames/buddy/buddy_001.webp",
+        "pet/frames/buddy/buddy_002.webp",
+        "pet/frames/buddy/buddy_003.webp",
+        "pet/frames/buddy/buddy_004.webp",
+        "pet/frames/buddy/buddy_005.webp",
+        "pet/frames/buddy/buddy_006.webp",
+        "pet/frames/buddy/buddy_007.webp"
+      ]
+    },
+    "celebrate": {
+      "name": "celebrate optimized WebP frames",
+      "frameMs": 108,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/celebrate/celebrate_000.webp",
+        "pet/frames/celebrate/celebrate_001.webp",
+        "pet/frames/celebrate/celebrate_002.webp",
+        "pet/frames/celebrate/celebrate_003.webp",
+        "pet/frames/celebrate/celebrate_004.webp",
+        "pet/frames/celebrate/celebrate_005.webp",
+        "pet/frames/celebrate/celebrate_006.webp",
+        "pet/frames/celebrate/celebrate_007.webp",
+        "pet/frames/celebrate/celebrate_008.webp",
+        "pet/frames/celebrate/celebrate_009.webp",
+        "pet/frames/celebrate/celebrate_010.webp",
+        "pet/frames/celebrate/celebrate_011.webp",
+        "pet/frames/celebrate/celebrate_012.webp",
+        "pet/frames/celebrate/celebrate_013.webp",
+        "pet/frames/celebrate/celebrate_014.webp",
+        "pet/frames/celebrate/celebrate_015.webp",
+        "pet/frames/celebrate/celebrate_016.webp",
+        "pet/frames/celebrate/celebrate_017.webp",
+        "pet/frames/celebrate/celebrate_018.webp",
+        "pet/frames/celebrate/celebrate_019.webp",
+        "pet/frames/celebrate/celebrate_020.webp",
+        "pet/frames/celebrate/celebrate_021.webp",
+        "pet/frames/celebrate/celebrate_022.webp",
+        "pet/frames/celebrate/celebrate_023.webp",
+        "pet/frames/celebrate/celebrate_024.webp",
+        "pet/frames/celebrate/celebrate_025.webp",
+        "pet/frames/celebrate/celebrate_026.webp",
+        "pet/frames/celebrate/celebrate_027.webp"
+      ]
+    },
+    "comfySleep": {
+      "name": "comfySleep optimized WebP frames",
+      "frameMs": 178,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/comfySleep/comfySleep_000.webp",
+        "pet/frames/comfySleep/comfySleep_001.webp",
+        "pet/frames/comfySleep/comfySleep_002.webp",
+        "pet/frames/comfySleep/comfySleep_003.webp",
+        "pet/frames/comfySleep/comfySleep_004.webp",
+        "pet/frames/comfySleep/comfySleep_005.webp"
+      ]
+    },
+    "dance": {
+      "name": "dance optimized WebP frames",
+      "frameMs": 76,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/dance/dance_000.webp",
+        "pet/frames/dance/dance_001.webp",
+        "pet/frames/dance/dance_002.webp",
+        "pet/frames/dance/dance_003.webp",
+        "pet/frames/dance/dance_004.webp",
+        "pet/frames/dance/dance_005.webp",
+        "pet/frames/dance/dance_006.webp",
+        "pet/frames/dance/dance_007.webp",
+        "pet/frames/dance/dance_008.webp",
+        "pet/frames/dance/dance_009.webp",
+        "pet/frames/dance/dance_010.webp",
+        "pet/frames/dance/dance_011.webp",
+        "pet/frames/dance/dance_012.webp",
+        "pet/frames/dance/dance_013.webp",
+        "pet/frames/dance/dance_014.webp",
+        "pet/frames/dance/dance_015.webp"
+      ]
+    },
     "eyeRoll": {
       "name": "eyeRoll optimized WebP frames",
       "frameMs": 60,
@@ -44,16 +170,48 @@
         "pet/frames/eyeRoll/eyeRoll_002.webp"
       ]
     },
+    "feed": {
+      "name": "feed optimized WebP frames",
+      "frameMs": 110,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/feed/feed_000.webp",
+        "pet/frames/feed/feed_001.webp",
+        "pet/frames/feed/feed_002.webp",
+        "pet/frames/feed/feed_003.webp",
+        "pet/frames/feed/feed_004.webp",
+        "pet/frames/feed/feed_005.webp",
+        "pet/frames/feed/feed_006.webp",
+        "pet/frames/feed/feed_007.webp",
+        "pet/frames/feed/feed_008.webp",
+        "pet/frames/feed/feed_009.webp",
+        "pet/frames/feed/feed_010.webp",
+        "pet/frames/feed/feed_011.webp",
+        "pet/frames/feed/feed_012.webp",
+        "pet/frames/feed/feed_013.webp",
+        "pet/frames/feed/feed_014.webp",
+        "pet/frames/feed/feed_015.webp",
+        "pet/frames/feed/feed_016.webp",
+        "pet/frames/feed/feed_017.webp",
+        "pet/frames/feed/feed_018.webp",
+        "pet/frames/feed/feed_019.webp",
+        "pet/frames/feed/feed_020.webp",
+        "pet/frames/feed/feed_021.webp",
+        "pet/frames/feed/feed_022.webp",
+        "pet/frames/feed/feed_023.webp",
+        "pet/frames/feed/feed_024.webp",
+        "pet/frames/feed/feed_025.webp"
+      ]
+    },
     "focus": {
       "name": "focus optimized WebP frames",
-      "frameMs": 160,
+      "frameMs": 360,
       "loop": true,
       "format": "webp",
       "frames": [
         "pet/frames/focus/focus_000.webp",
-        "pet/frames/focus/focus_001.webp",
-        "pet/frames/focus/focus_002.webp",
-        "pet/frames/focus/focus_003.webp"
+        "pet/frames/focus/focus_001.webp"
       ]
     },
     "happy": {
@@ -65,33 +223,34 @@
         "pet/frames/happy/happy_000.webp",
         "pet/frames/happy/happy_001.webp",
         "pet/frames/happy/happy_002.webp",
-        "pet/frames/happy/happy_003.webp",
-        "pet/frames/happy/happy_004.webp",
-        "pet/frames/happy/happy_005.webp",
-        "pet/frames/happy/happy_006.webp",
-        "pet/frames/happy/happy_007.webp",
-        "pet/frames/happy/happy_008.webp",
-        "pet/frames/happy/happy_009.webp",
-        "pet/frames/happy/happy_010.webp",
-        "pet/frames/happy/happy_011.webp",
-        "pet/frames/happy/happy_012.webp",
-        "pet/frames/happy/happy_013.webp",
-        "pet/frames/happy/happy_014.webp",
-        "pet/frames/happy/happy_015.webp"
+        "pet/frames/happy/happy_003.webp"
       ]
     },
     "idle": {
-      "name": "idle alias of softIdle",
-      "frameMs": 160,
+      "name": "idle optimized WebP frames",
+      "frameMs": 80,
       "loop": true,
       "format": "webp",
       "frames": [
-        "pet/frames/softIdle/softIdle_000.webp",
-        "pet/frames/softIdle/softIdle_001.webp",
-        "pet/frames/softIdle/softIdle_002.webp",
-        "pet/frames/softIdle/softIdle_003.webp"
-      ],
-      "aliasOf": "softIdle"
+        "pet/frames/idle/idle_000.webp",
+        "pet/frames/idle/idle_001.webp",
+        "pet/frames/idle/idle_002.webp",
+        "pet/frames/idle/idle_003.webp",
+        "pet/frames/idle/idle_004.webp",
+        "pet/frames/idle/idle_005.webp",
+        "pet/frames/idle/idle_006.webp",
+        "pet/frames/idle/idle_007.webp",
+        "pet/frames/idle/idle_008.webp",
+        "pet/frames/idle/idle_009.webp",
+        "pet/frames/idle/idle_010.webp",
+        "pet/frames/idle/idle_011.webp",
+        "pet/frames/idle/idle_012.webp",
+        "pet/frames/idle/idle_013.webp",
+        "pet/frames/idle/idle_014.webp",
+        "pet/frames/idle/idle_015.webp",
+        "pet/frames/idle/idle_016.webp",
+        "pet/frames/idle/idle_017.webp"
+      ]
     },
     "note": {
       "name": "note optimized WebP frames",
@@ -102,7 +261,53 @@
         "pet/frames/note/note_000.webp",
         "pet/frames/note/note_001.webp",
         "pet/frames/note/note_002.webp",
-        "pet/frames/note/note_003.webp"
+        "pet/frames/note/note_003.webp",
+        "pet/frames/note/note_004.webp",
+        "pet/frames/note/note_005.webp",
+        "pet/frames/note/note_006.webp",
+        "pet/frames/note/note_007.webp",
+        "pet/frames/note/note_008.webp",
+        "pet/frames/note/note_009.webp",
+        "pet/frames/note/note_010.webp",
+        "pet/frames/note/note_011.webp",
+        "pet/frames/note/note_012.webp",
+        "pet/frames/note/note_013.webp",
+        "pet/frames/note/note_014.webp",
+        "pet/frames/note/note_015.webp",
+        "pet/frames/note/note_016.webp",
+        "pet/frames/note/note_017.webp",
+        "pet/frames/note/note_018.webp",
+        "pet/frames/note/note_019.webp"
+      ]
+    },
+    "patrol": {
+      "name": "patrol optimized WebP frames",
+      "frameMs": 120,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/patrol/patrol_000.webp",
+        "pet/frames/patrol/patrol_001.webp",
+        "pet/frames/patrol/patrol_002.webp",
+        "pet/frames/patrol/patrol_003.webp",
+        "pet/frames/patrol/patrol_004.webp",
+        "pet/frames/patrol/patrol_005.webp",
+        "pet/frames/patrol/patrol_006.webp",
+        "pet/frames/patrol/patrol_007.webp"
+      ]
+    },
+    "recharge": {
+      "name": "recharge optimized WebP frames",
+      "frameMs": 178,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/recharge/recharge_000.webp",
+        "pet/frames/recharge/recharge_001.webp",
+        "pet/frames/recharge/recharge_002.webp",
+        "pet/frames/recharge/recharge_003.webp",
+        "pet/frames/recharge/recharge_004.webp",
+        "pet/frames/recharge/recharge_005.webp"
       ]
     },
     "reminder": {
@@ -114,7 +319,9 @@
         "pet/frames/reminder/reminder_000.webp",
         "pet/frames/reminder/reminder_001.webp",
         "pet/frames/reminder/reminder_002.webp",
-        "pet/frames/reminder/reminder_003.webp"
+        "pet/frames/reminder/reminder_003.webp",
+        "pet/frames/reminder/reminder_004.webp",
+        "pet/frames/reminder/reminder_005.webp"
       ]
     },
     "ride": {
@@ -126,8 +333,7 @@
         "pet/frames/ride/ride_000.webp",
         "pet/frames/ride/ride_001.webp",
         "pet/frames/ride/ride_002.webp",
-        "pet/frames/ride/ride_003.webp",
-        "pet/frames/ride/ride_004.webp"
+        "pet/frames/ride/ride_003.webp"
       ]
     },
     "settings": {
@@ -139,7 +345,9 @@
         "pet/frames/settings/settings_000.webp",
         "pet/frames/settings/settings_001.webp",
         "pet/frames/settings/settings_002.webp",
-        "pet/frames/settings/settings_003.webp"
+        "pet/frames/settings/settings_003.webp",
+        "pet/frames/settings/settings_004.webp",
+        "pet/frames/settings/settings_005.webp"
       ]
     },
     "shortcut": {
@@ -154,6 +362,38 @@
         "pet/frames/shortcut/shortcut_003.webp"
       ]
     },
+    "shy": {
+      "name": "shy optimized WebP frames",
+      "frameMs": 120,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/shy/shy_000.webp",
+        "pet/frames/shy/shy_001.webp",
+        "pet/frames/shy/shy_002.webp",
+        "pet/frames/shy/shy_003.webp",
+        "pet/frames/shy/shy_004.webp",
+        "pet/frames/shy/shy_005.webp",
+        "pet/frames/shy/shy_006.webp",
+        "pet/frames/shy/shy_007.webp",
+        "pet/frames/shy/shy_008.webp",
+        "pet/frames/shy/shy_009.webp",
+        "pet/frames/shy/shy_010.webp",
+        "pet/frames/shy/shy_011.webp",
+        "pet/frames/shy/shy_012.webp",
+        "pet/frames/shy/shy_013.webp",
+        "pet/frames/shy/shy_014.webp",
+        "pet/frames/shy/shy_015.webp",
+        "pet/frames/shy/shy_016.webp",
+        "pet/frames/shy/shy_017.webp",
+        "pet/frames/shy/shy_018.webp",
+        "pet/frames/shy/shy_019.webp",
+        "pet/frames/shy/shy_020.webp",
+        "pet/frames/shy/shy_021.webp",
+        "pet/frames/shy/shy_022.webp",
+        "pet/frames/shy/shy_023.webp"
+      ]
+    },
     "silly": {
       "name": "silly optimized WebP frames",
       "frameMs": 100,
@@ -163,6 +403,20 @@
         "pet/frames/silly/silly_000.webp",
         "pet/frames/silly/silly_001.webp",
         "pet/frames/silly/silly_002.webp"
+      ]
+    },
+    "slack": {
+      "name": "slack optimized WebP frames",
+      "frameMs": 180,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/slack/slack_000.webp",
+        "pet/frames/slack/slack_001.webp",
+        "pet/frames/slack/slack_002.webp",
+        "pet/frames/slack/slack_003.webp",
+        "pet/frames/slack/slack_004.webp",
+        "pet/frames/slack/slack_005.webp"
       ]
     },
     "sleep": {
@@ -175,7 +429,8 @@
         "pet/frames/sleep/sleep_001.webp",
         "pet/frames/sleep/sleep_002.webp",
         "pet/frames/sleep/sleep_003.webp",
-        "pet/frames/sleep/sleep_004.webp"
+        "pet/frames/sleep/sleep_004.webp",
+        "pet/frames/sleep/sleep_005.webp"
       ]
     },
     "softIdle": {
@@ -187,7 +442,21 @@
         "pet/frames/softIdle/softIdle_000.webp",
         "pet/frames/softIdle/softIdle_001.webp",
         "pet/frames/softIdle/softIdle_002.webp",
-        "pet/frames/softIdle/softIdle_003.webp"
+        "pet/frames/softIdle/softIdle_003.webp",
+        "pet/frames/softIdle/softIdle_004.webp",
+        "pet/frames/softIdle/softIdle_005.webp",
+        "pet/frames/softIdle/softIdle_006.webp",
+        "pet/frames/softIdle/softIdle_007.webp",
+        "pet/frames/softIdle/softIdle_008.webp",
+        "pet/frames/softIdle/softIdle_009.webp",
+        "pet/frames/softIdle/softIdle_010.webp",
+        "pet/frames/softIdle/softIdle_011.webp",
+        "pet/frames/softIdle/softIdle_012.webp",
+        "pet/frames/softIdle/softIdle_013.webp",
+        "pet/frames/softIdle/softIdle_014.webp",
+        "pet/frames/softIdle/softIdle_015.webp",
+        "pet/frames/softIdle/softIdle_016.webp",
+        "pet/frames/softIdle/softIdle_017.webp"
       ]
     },
     "spin": {
@@ -203,7 +472,43 @@
         "pet/frames/spin/spin_004.webp",
         "pet/frames/spin/spin_005.webp",
         "pet/frames/spin/spin_006.webp",
-        "pet/frames/spin/spin_007.webp"
+        "pet/frames/spin/spin_007.webp",
+        "pet/frames/spin/spin_008.webp",
+        "pet/frames/spin/spin_009.webp",
+        "pet/frames/spin/spin_010.webp",
+        "pet/frames/spin/spin_011.webp",
+        "pet/frames/spin/spin_012.webp",
+        "pet/frames/spin/spin_013.webp",
+        "pet/frames/spin/spin_014.webp",
+        "pet/frames/spin/spin_015.webp",
+        "pet/frames/spin/spin_016.webp",
+        "pet/frames/spin/spin_017.webp",
+        "pet/frames/spin/spin_018.webp",
+        "pet/frames/spin/spin_019.webp",
+        "pet/frames/spin/spin_020.webp",
+        "pet/frames/spin/spin_021.webp",
+        "pet/frames/spin/spin_022.webp",
+        "pet/frames/spin/spin_023.webp",
+        "pet/frames/spin/spin_024.webp",
+        "pet/frames/spin/spin_025.webp",
+        "pet/frames/spin/spin_026.webp",
+        "pet/frames/spin/spin_027.webp"
+      ]
+    },
+    "walk": {
+      "name": "walk optimized WebP frames",
+      "frameMs": 120,
+      "loop": true,
+      "format": "webp",
+      "frames": [
+        "pet/frames/walk/walk_000.webp",
+        "pet/frames/walk/walk_001.webp",
+        "pet/frames/walk/walk_002.webp",
+        "pet/frames/walk/walk_003.webp",
+        "pet/frames/walk/walk_004.webp",
+        "pet/frames/walk/walk_005.webp",
+        "pet/frames/walk/walk_006.webp",
+        "pet/frames/walk/walk_007.webp"
       ]
     },
     "walkDog": {
@@ -230,57 +535,15 @@
         "pet/frames/walkDog/walkDog_015.webp"
       ]
     },
-    "blink": {
-      "name": "blink alias of softIdle",
-      "frameMs": 160,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/softIdle/softIdle_000.webp",
-        "pet/frames/softIdle/softIdle_001.webp",
-        "pet/frames/softIdle/softIdle_002.webp",
-        "pet/frames/softIdle/softIdle_003.webp"
-      ],
-      "aliasOf": "softIdle"
-    },
-    "buddy": {
-      "name": "buddy alias of softIdle",
-      "frameMs": 160,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/softIdle/softIdle_000.webp",
-        "pet/frames/softIdle/softIdle_001.webp",
-        "pet/frames/softIdle/softIdle_002.webp",
-        "pet/frames/softIdle/softIdle_003.webp"
-      ],
-      "aliasOf": "softIdle"
-    },
-    "slack": {
-      "name": "slack alias of softIdle",
-      "frameMs": 160,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/softIdle/softIdle_000.webp",
-        "pet/frames/softIdle/softIdle_001.webp",
-        "pet/frames/softIdle/softIdle_002.webp",
-        "pet/frames/softIdle/softIdle_003.webp"
-      ],
-      "aliasOf": "softIdle"
-    },
     "work": {
-      "name": "work alias of focus",
-      "frameMs": 160,
+      "name": "work optimized WebP frames",
+      "frameMs": 360,
       "loop": true,
       "format": "webp",
       "frames": [
-        "pet/frames/focus/focus_000.webp",
-        "pet/frames/focus/focus_001.webp",
-        "pet/frames/focus/focus_002.webp",
-        "pet/frames/focus/focus_003.webp"
-      ],
-      "aliasOf": "focus"
+        "pet/frames/work/work_000.webp",
+        "pet/frames/work/work_001.webp"
+      ]
     },
     "drag": {
       "name": "drag alias of softIdle",
@@ -291,187 +554,23 @@
         "pet/frames/softIdle/softIdle_000.webp",
         "pet/frames/softIdle/softIdle_001.webp",
         "pet/frames/softIdle/softIdle_002.webp",
-        "pet/frames/softIdle/softIdle_003.webp"
+        "pet/frames/softIdle/softIdle_003.webp",
+        "pet/frames/softIdle/softIdle_004.webp",
+        "pet/frames/softIdle/softIdle_005.webp",
+        "pet/frames/softIdle/softIdle_006.webp",
+        "pet/frames/softIdle/softIdle_007.webp",
+        "pet/frames/softIdle/softIdle_008.webp",
+        "pet/frames/softIdle/softIdle_009.webp",
+        "pet/frames/softIdle/softIdle_010.webp",
+        "pet/frames/softIdle/softIdle_011.webp",
+        "pet/frames/softIdle/softIdle_012.webp",
+        "pet/frames/softIdle/softIdle_013.webp",
+        "pet/frames/softIdle/softIdle_014.webp",
+        "pet/frames/softIdle/softIdle_015.webp",
+        "pet/frames/softIdle/softIdle_016.webp",
+        "pet/frames/softIdle/softIdle_017.webp"
       ],
       "aliasOf": "softIdle"
-    },
-    "feed": {
-      "name": "feed alias of bite",
-      "frameMs": 129,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/bite/bite_000.webp",
-        "pet/frames/bite/bite_001.webp",
-        "pet/frames/bite/bite_002.webp",
-        "pet/frames/bite/bite_003.webp",
-        "pet/frames/bite/bite_004.webp",
-        "pet/frames/bite/bite_005.webp",
-        "pet/frames/bite/bite_006.webp",
-        "pet/frames/bite/bite_007.webp",
-        "pet/frames/bite/bite_008.webp",
-        "pet/frames/bite/bite_009.webp",
-        "pet/frames/bite/bite_010.webp",
-        "pet/frames/bite/bite_011.webp",
-        "pet/frames/bite/bite_012.webp",
-        "pet/frames/bite/bite_013.webp",
-        "pet/frames/bite/bite_014.webp",
-        "pet/frames/bite/bite_015.webp",
-        "pet/frames/bite/bite_016.webp"
-      ],
-      "aliasOf": "bite"
-    },
-    "angry": {
-      "name": "angry alias of eyeRoll",
-      "frameMs": 60,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/eyeRoll/eyeRoll_000.webp",
-        "pet/frames/eyeRoll/eyeRoll_001.webp",
-        "pet/frames/eyeRoll/eyeRoll_002.webp"
-      ],
-      "aliasOf": "eyeRoll"
-    },
-    "comfySleep": {
-      "name": "comfySleep alias of sleep",
-      "frameMs": 178,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/sleep/sleep_000.webp",
-        "pet/frames/sleep/sleep_001.webp",
-        "pet/frames/sleep/sleep_002.webp",
-        "pet/frames/sleep/sleep_003.webp",
-        "pet/frames/sleep/sleep_004.webp"
-      ],
-      "aliasOf": "sleep"
-    },
-    "recharge": {
-      "name": "recharge alias of sleep",
-      "frameMs": 178,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/sleep/sleep_000.webp",
-        "pet/frames/sleep/sleep_001.webp",
-        "pet/frames/sleep/sleep_002.webp",
-        "pet/frames/sleep/sleep_003.webp",
-        "pet/frames/sleep/sleep_004.webp"
-      ],
-      "aliasOf": "sleep"
-    },
-    "patrol": {
-      "name": "patrol alias of walkDog",
-      "frameMs": 100,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/walkDog/walkDog_000.webp",
-        "pet/frames/walkDog/walkDog_001.webp",
-        "pet/frames/walkDog/walkDog_002.webp",
-        "pet/frames/walkDog/walkDog_003.webp",
-        "pet/frames/walkDog/walkDog_004.webp",
-        "pet/frames/walkDog/walkDog_005.webp",
-        "pet/frames/walkDog/walkDog_006.webp",
-        "pet/frames/walkDog/walkDog_007.webp",
-        "pet/frames/walkDog/walkDog_008.webp",
-        "pet/frames/walkDog/walkDog_009.webp",
-        "pet/frames/walkDog/walkDog_010.webp",
-        "pet/frames/walkDog/walkDog_011.webp",
-        "pet/frames/walkDog/walkDog_012.webp",
-        "pet/frames/walkDog/walkDog_013.webp",
-        "pet/frames/walkDog/walkDog_014.webp",
-        "pet/frames/walkDog/walkDog_015.webp"
-      ],
-      "aliasOf": "walkDog"
-    },
-    "dance": {
-      "name": "dance alias of happy",
-      "frameMs": 76,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/happy/happy_000.webp",
-        "pet/frames/happy/happy_001.webp",
-        "pet/frames/happy/happy_002.webp",
-        "pet/frames/happy/happy_003.webp",
-        "pet/frames/happy/happy_004.webp",
-        "pet/frames/happy/happy_005.webp",
-        "pet/frames/happy/happy_006.webp",
-        "pet/frames/happy/happy_007.webp",
-        "pet/frames/happy/happy_008.webp",
-        "pet/frames/happy/happy_009.webp",
-        "pet/frames/happy/happy_010.webp",
-        "pet/frames/happy/happy_011.webp",
-        "pet/frames/happy/happy_012.webp",
-        "pet/frames/happy/happy_013.webp",
-        "pet/frames/happy/happy_014.webp",
-        "pet/frames/happy/happy_015.webp"
-      ],
-      "aliasOf": "happy"
-    },
-    "celebrate": {
-      "name": "celebrate alias of happy",
-      "frameMs": 76,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/happy/happy_000.webp",
-        "pet/frames/happy/happy_001.webp",
-        "pet/frames/happy/happy_002.webp",
-        "pet/frames/happy/happy_003.webp",
-        "pet/frames/happy/happy_004.webp",
-        "pet/frames/happy/happy_005.webp",
-        "pet/frames/happy/happy_006.webp",
-        "pet/frames/happy/happy_007.webp",
-        "pet/frames/happy/happy_008.webp",
-        "pet/frames/happy/happy_009.webp",
-        "pet/frames/happy/happy_010.webp",
-        "pet/frames/happy/happy_011.webp",
-        "pet/frames/happy/happy_012.webp",
-        "pet/frames/happy/happy_013.webp",
-        "pet/frames/happy/happy_014.webp",
-        "pet/frames/happy/happy_015.webp"
-      ],
-      "aliasOf": "happy"
-    },
-    "walk": {
-      "name": "walk alias of walkDog",
-      "frameMs": 100,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/walkDog/walkDog_000.webp",
-        "pet/frames/walkDog/walkDog_001.webp",
-        "pet/frames/walkDog/walkDog_002.webp",
-        "pet/frames/walkDog/walkDog_003.webp",
-        "pet/frames/walkDog/walkDog_004.webp",
-        "pet/frames/walkDog/walkDog_005.webp",
-        "pet/frames/walkDog/walkDog_006.webp",
-        "pet/frames/walkDog/walkDog_007.webp",
-        "pet/frames/walkDog/walkDog_008.webp",
-        "pet/frames/walkDog/walkDog_009.webp",
-        "pet/frames/walkDog/walkDog_010.webp",
-        "pet/frames/walkDog/walkDog_011.webp",
-        "pet/frames/walkDog/walkDog_012.webp",
-        "pet/frames/walkDog/walkDog_013.webp",
-        "pet/frames/walkDog/walkDog_014.webp",
-        "pet/frames/walkDog/walkDog_015.webp"
-      ],
-      "aliasOf": "walkDog"
-    },
-    "shy": {
-      "name": "shy alias of silly",
-      "frameMs": 100,
-      "loop": true,
-      "format": "webp",
-      "frames": [
-        "pet/frames/silly/silly_000.webp",
-        "pet/frames/silly/silly_001.webp",
-        "pet/frames/silly/silly_002.webp"
-      ],
-      "aliasOf": "silly"
     }
   }
 }

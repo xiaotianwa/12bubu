@@ -18,7 +18,7 @@ const toolItems: WheelItem[] = [
   { label: "番茄钟", icon: "timer", panel: "timer", tone: "pink" },
   { label: "提醒", icon: "reminder", panel: "reminders", tone: "blue" },
   { label: "启动", icon: "launch", panel: "shortcuts", tone: "mint" },
-  { label: "走一走", icon: "walk", action: "roam", tone: "pink" }
+  { label: "散步", icon: "walk", action: "roam", tone: "pink" }
 ];
 
 interface FunctionWheelProps {
@@ -112,7 +112,7 @@ export function FunctionWheel({ open, onOpenPanel, onAction, onToggle, onDismiss
   };
 
   return (
-    <nav className={`function-wheel ${open ? "is-open" : ""}`} aria-label="布布快捷功能">
+    <nav className={`function-wheel ${open ? "is-open" : ""}`} aria-label="一二桌宠快捷功能">
       <span className="wheel-action-dock" aria-hidden="true" />
       <div className="wheel-side-list" aria-hidden={!open}>
         {toolItems.map((item, index) => renderItem(item, index))}

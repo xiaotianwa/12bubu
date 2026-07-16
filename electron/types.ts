@@ -124,7 +124,7 @@ export const defaultData: AppData = {
   notes: [
     {
       id: "welcome-note",
-      content: "今天也要慢慢来呀。\n点布布可以打开功能泡泡。",
+      content: "今天也要慢慢来呀。\n点一二可以打开功能泡泡。",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       pinned: true

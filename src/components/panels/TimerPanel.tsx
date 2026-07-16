@@ -74,6 +74,15 @@ export function TimerPanel() {
     });
   };
 
+  const showOnDesktop = () => {
+    void window.bubu.openTimerWidget();
+    void window.bubu.setPetMood({
+      mood: data.timer.mode === "focus" ? "focus" : "recharge",
+      bubble: "番茄钟贴到桌面啦。",
+      durationMs: 0
+    });
+  };
+
   return (
     <div className={`timer-panel ${data.timer.running ? "is-running" : ""}`}>
       <section className="timer-hero" aria-live="polite">
@@ -108,6 +117,9 @@ export function TimerPanel() {
         </button>
         <button type="button" onClick={switchMode}>
           切换模式
+        </button>
+        <button type="button" onClick={showOnDesktop}>
+          桌面显示
         </button>
       </div>
       <p className="hint">关闭面板后也会继续计时；开始、暂停和切换模式都会同步桌宠动画。</p>

@@ -46,7 +46,7 @@ ALIASES = {
     "buddy": "softIdle",
     "slack": "softIdle",
     "work": "focus",
-    "drag": "softIdle",
+    "drag": "walkDog",
     "feed": "bite",
     "angry": "eyeRoll",
     "comfySleep": "sleep",
@@ -58,7 +58,6 @@ ALIASES = {
     "shy": "silly",
 }
 
-
 def public_path(path: Path) -> str:
     return path.relative_to(ROOT / "public").as_posix()
 
@@ -68,6 +67,8 @@ def main() -> None:
     saved_bytes = 0
 
     for png in FRAMES_ROOT.glob("*/*.png"):
+        if png.parent.name.startswith("base"):
+            continue
         webp = png.with_suffix(".webp")
         with Image.open(png) as image:
             image.save(webp, "WEBP", quality=82, method=3, lossless=False)
@@ -76,6 +77,8 @@ def main() -> None:
 
     animations: dict[str, dict[str, object]] = {}
     for folder in sorted(path for path in FRAMES_ROOT.iterdir() if path.is_dir()):
+        if folder.name.startswith("base"):
+            continue
         files = sorted(folder.glob("*.webp"))
         if not files:
             continue
@@ -104,7 +107,7 @@ def main() -> None:
         "cell": {"width": 256, "height": 256},
         "preferredFormat": "webp",
         "fallbackFormat": "png",
-        "notes": "Optimized WebP frames generated from retained PNG extracts. PNG frames remain for development fallback and source review.",
+        "notes": "Optimized WebP frames generated from retained GIF/PNG extracts. PNG frames remain for development fallback and source review.",
         "animations": animations,
     }
 

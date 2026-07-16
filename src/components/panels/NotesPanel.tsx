@@ -27,7 +27,7 @@ export function NotesPanel() {
 
   const pinnedCount = data?.notes.filter((note) => note.pinned).length ?? 0;
 
-  if (loading || !data) return <div className="empty-state">布布正在翻便签本...</div>;
+  if (loading || !data) return <div className="empty-state">一二正在翻便签本...</div>;
 
   const addNote = () => {
     void patch((current) => ({
@@ -57,6 +57,17 @@ export function NotesPanel() {
 
   const deleteNote = (id: string) => {
     void patch((current) => ({ ...current, notes: current.notes.filter((note) => note.id !== id) }));
+  };
+
+  const pinToDesktop = (id: string) => {
+    void patch((current) => ({
+      ...current,
+      notes: current.notes.map((note) =>
+        note.id === id ? { ...note, pinned: true, updatedAt: new Date().toISOString() } : note
+      )
+    }));
+    void window.bubu.openNoteWidget(id);
+    void window.bubu.setPetMood({ mood: "note", bubble: "便签贴到桌面啦。", durationMs: 0 });
   };
 
   return (
@@ -97,6 +108,9 @@ export function NotesPanel() {
               <time dateTime={note.updatedAt}>{new Date(note.updatedAt).toLocaleDateString("zh-CN")}</time>
               <button type="button" onClick={() => togglePinned(note.id)}>
                 {note.pinned ? "取消置顶" : "置顶"}
+              </button>
+              <button type="button" onClick={() => pinToDesktop(note.id)}>
+                贴桌面
               </button>
               <button type="button" onClick={() => deleteNote(note.id)}>
                 删除

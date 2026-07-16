@@ -1,6 +1,7 @@
 import type { AppData, AppSettings, PanelName, PetMoodEvent } from "./types";
 
 const now = new Date().toISOString();
+let previewTimerInterval: number | null = null;
 const fallbackData: AppData = {
   settings: {
     alwaysOnTop: true,
@@ -49,11 +50,37 @@ function readFallbackData(): AppData {
 
 function saveFallbackData(data: AppData): AppData {
   localStorage.setItem("bubu-preview-data", JSON.stringify(data));
+  window.dispatchEvent(new CustomEvent<AppData["timer"]>("bubu:timer-update", { detail: data.timer }));
   return data;
+}
+
+function startPreviewTimer() {
+  if (previewTimerInterval) return;
+  previewTimerInterval = window.setInterval(() => {
+    const current = readFallbackData();
+    if (!current.timer.running) return;
+
+    const remainingSeconds = Math.max(0, current.timer.remainingSeconds - 1);
+    if (remainingSeconds > 0) {
+      saveFallbackData({ ...current, timer: { ...current.timer, remainingSeconds } });
+      return;
+    }
+
+    const nextMode = current.timer.mode === "focus" ? "break" : "focus";
+    saveFallbackData({
+      ...current,
+      timer: {
+        mode: nextMode,
+        remainingSeconds: nextMode === "focus" ? 25 * 60 : 5 * 60,
+        running: false
+      }
+    });
+  }, 1_000);
 }
 
 export function installDevBridge() {
   if (window.bubu) return;
+  startPreviewTimer();
 
   window.bubu = {
     getData: async () => readFallbackData(),
@@ -77,6 +104,18 @@ export function installDevBridge() {
     closePanel: async () => {
       window.location.hash = "/";
     },
+    openNoteWidget: async (noteId: string) => {
+      window.open(`${window.location.origin}${window.location.pathname}#/widget/note/${noteId}`, "_blank", "width=280,height=220");
+    },
+    closeNoteWidget: async () => {
+      window.close();
+    },
+    openTimerWidget: async () => {
+      window.open(`${window.location.origin}${window.location.pathname}#/widget/timer`, "_blank", "width=246,height=166");
+    },
+    closeTimerWidget: async () => {
+      window.close();
+    },
     quit: async () => undefined,
     pickShortcut: async () => ({
       appPath: "C:\\Windows\\System32\\notepad.exe",
@@ -87,12 +126,13 @@ export function installDevBridge() {
     roamPet: async () => undefined,
     movePet: async () => undefined,
     throwPet: async () => undefined,
+    setClickThrough: async () => undefined,
     setStartup: async (value: boolean) => {
       const current = readFallbackData();
       return saveFallbackData({ ...current, settings: { ...current.settings, launchAtStartup: value } });
     },
     notify: async (message: string) => {
-      console.info(`[一二布布提醒] ${message}`);
+      console.info(`[一二提醒] ${message}`);
     },
     setPetMood: async (event: PetMoodEvent) => {
       window.dispatchEvent(new CustomEvent<PetMoodEvent>("bubu:pet-mood", { detail: event }));
@@ -105,7 +145,11 @@ export function installDevBridge() {
       return () => window.removeEventListener("bubu:pet-mood", listener);
     },
     onGentleReminder: () => () => undefined,
-    onTimerUpdate: () => () => undefined,
+    onTimerUpdate: (callback) => {
+      const listener = (event: Event) => callback((event as CustomEvent<AppData["timer"]>).detail);
+      window.addEventListener("bubu:timer-update", listener);
+      return () => window.removeEventListener("bubu:timer-update", listener);
+    },
     onTimerComplete: () => () => undefined
   };
 }

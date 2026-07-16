@@ -5,7 +5,7 @@ export function SettingsPanel() {
   const { data, loading, setData } = useAppData();
   const [updateMessage, setUpdateMessage] = useState("");
 
-  if (loading || !data) return <div className="empty-state">布布正在整理设置...</div>;
+  if (loading || !data) return <div className="empty-state">一二正在整理设置...</div>;
 
   const showSettingsMood = (message: string) => {
     void window.bubu.setPetMood({ mood: "settings", bubble: message, durationMs: 3_600 });
@@ -50,7 +50,7 @@ export function SettingsPanel() {
       <article className="setting-card">
         <div>
           <strong>窗口置顶</strong>
-          <p>让布布一直待在桌面上。</p>
+          <p>让一二一直待在桌面上。</p>
         </div>
         <label className="switch">
           <input
@@ -131,7 +131,7 @@ export function SettingsPanel() {
       <article className="setting-card">
         <div>
           <strong>开机启动</strong>
-          <p>登录 Windows 后自动召唤布布。</p>
+          <p>登录 Windows 后自动召唤一二。</p>
         </div>
         <label className="switch">
           <input
@@ -163,7 +163,7 @@ export function SettingsPanel() {
           className="secondary-button"
           type="button"
           onClick={() => {
-            void window.bubu.notify("布布提醒测试成功。");
+            void window.bubu.notify("一二提醒测试成功。");
             void window.bubu.setPetMood({ mood: "reminder", bubble: "提醒测试成功。", durationMs: 4_200 });
           }}
         >

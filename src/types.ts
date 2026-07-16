@@ -118,6 +118,10 @@ export interface BubuApi {
   savePetPosition: () => Promise<AppData>;
   openPanel: (panel: PanelName) => Promise<void>;
   closePanel: () => Promise<void>;
+  openNoteWidget: (noteId: string) => Promise<void>;
+  closeNoteWidget: (noteId: string) => Promise<void>;
+  openTimerWidget: () => Promise<void>;
+  closeTimerWidget: () => Promise<void>;
   quit: () => Promise<void>;
   pickShortcut: () => Promise<ShortcutPickResult | null>;
   launchShortcut: (appPath: string) => Promise<{ ok: boolean; error?: string }>;
@@ -125,6 +129,7 @@ export interface BubuApi {
   roamPet: (pace?: number) => Promise<void>;
   movePet: (dx: number, dy: number) => Promise<void>;
   throwPet: (velocityX: number, velocityY: number) => Promise<void>;
+  setClickThrough: (value: boolean) => Promise<void>;
   setStartup: (value: boolean) => Promise<AppData>;
   notify: (message: string) => Promise<void>;
   setPetMood: (event: PetMoodEvent) => Promise<void>;

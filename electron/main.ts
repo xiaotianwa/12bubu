@@ -8,16 +8,19 @@ const devUrl = process.env.VITE_DEV_SERVER_URL ?? "http://127.0.0.1:5173";
 const petWindowSize = { width: 360, height: 360 };
 const edgeSnapThreshold = 48;
 const reminderMessages: Record<ReminderType, string> = {
-  water: "该喝点水啦，布布把杯子递到桌边。",
-  rest: "休息一下眼睛吧，看看远处，布布在旁边等你。"
+  water: "该喝点水啦，一二把杯子递到桌边。",
+  rest: "休息一下眼睛吧，看看远处，一二在旁边等你。"
 };
 
 let mainWindow: BrowserWindow | null = null;
 let panelWindow: BrowserWindow | null = null;
+let timerWidgetWindow: BrowserWindow | null = null;
+const noteWidgetWindows = new Map<string, BrowserWindow>();
 let tray: Tray | null = null;
 let reminderTimer: NodeJS.Timeout | null = null;
 let timerTimer: NodeJS.Timeout | null = null;
 let petMotionTimer: NodeJS.Timeout | null = null;
+let petClickThrough = false;
 
 function getPreloadPath(): string {
   return path.join(__dirname, "preload.js");
@@ -25,7 +28,7 @@ function getPreloadPath(): string {
 
 function getRendererUrl(route = "/"): string {
   if (isDev) {
-    return `${devUrl}${route}`;
+    return route === "/" ? `${devUrl}/#/` : `${devUrl}/#${route}`;
   }
   return `file://${path.join(__dirname, "../dist/index.html")}${route === "/" ? "" : `#${route}`}`;
 }
@@ -84,6 +87,9 @@ function createMainWindow(): void {
 
   mainWindow.setOpacity(data.settings.opacity);
   mainWindow.loadURL(getRendererUrl("/"));
+  mainWindow.on("blur", () => {
+    if (petClickThrough) mainWindow?.setIgnoreMouseEvents(true, { forward: true });
+  });
 
   mainWindow.on("moved", () => {
     const bounds = mainWindow?.getBounds();
@@ -115,6 +121,7 @@ function clearPetMotion(): void {
 function sendTimerComplete(event: TimerCompleteEvent): void {
   mainWindow?.webContents.send("timer:complete", event);
   panelWindow?.webContents.send("timer:complete", event);
+  timerWidgetWindow?.webContents.send("timer:complete", event);
 }
 
 function clampPetBounds(bounds: Electron.Rectangle, x: number, y: number): PetPosition {
@@ -185,6 +192,7 @@ async function createShortcutPickResult(appPath: string): Promise<ShortcutPickRe
 }
 
 function movePetBy(dx: number, dy: number, persist = true): void {
+  setPetClickThrough(false);
   clearPetMotion();
   const bounds = mainWindow?.getBounds();
   if (!bounds || !mainWindow) return;
@@ -201,20 +209,24 @@ function randomPetTarget(bounds: Electron.Rectangle): PetPosition {
   const area = screen.getDisplayMatching(bounds).workArea;
   const maxX = Math.max(area.x, area.x + area.width - bounds.width);
   const maxY = Math.max(area.y, area.y + area.height - bounds.height);
-  const minDistance = Math.min(280, Math.max(120, Math.min(area.width, area.height) * 0.22));
+  const minDistance = 64;
+  const maxDistance = Math.min(180, Math.max(96, Math.min(area.width, area.height) * 0.16));
 
   let target = { x: bounds.x, y: bounds.y };
   for (let attempt = 0; attempt < 12; attempt += 1) {
-    const x = area.x + Math.random() * Math.max(1, maxX - area.x);
-    const y = area.y + Math.random() * Math.max(1, maxY - area.y);
+    const angle = Math.random() * Math.PI * 2;
+    const distance = minDistance + Math.random() * (maxDistance - minDistance);
+    const x = bounds.x + Math.cos(angle) * distance;
+    const y = bounds.y + Math.sin(angle) * distance * 0.55;
     target = clampPetBounds(bounds, x, y);
-    if (Math.hypot(target.x - bounds.x, target.y - bounds.y) >= minDistance) break;
+    if (Math.hypot(target.x - bounds.x, target.y - bounds.y) >= minDistance * 0.72) break;
   }
 
   return target;
 }
 
 function roamPet(pace = 420): void {
+  setPetClickThrough(false);
   clearPetMotion();
   if (!mainWindow) return;
 
@@ -253,6 +265,7 @@ function roamPet(pace = 420): void {
 }
 
 function throwPet(velocityX: number, velocityY: number): void {
+  setPetClickThrough(false);
   clearPetMotion();
   if (!mainWindow) return;
 
@@ -298,10 +311,42 @@ function throwPet(velocityX: number, velocityY: number): void {
   }, 16);
 }
 
+function setPetClickThrough(value: boolean): void {
+  if (!mainWindow || petClickThrough === value) return;
+  petClickThrough = value;
+  mainWindow.setIgnoreMouseEvents(value, value ? { forward: true } : undefined);
+}
+
 function broadcastTimer(): void {
   const timer = readData().timer;
   mainWindow?.webContents.send("timer:updated", timer);
   panelWindow?.webContents.send("timer:updated", timer);
+  timerWidgetWindow?.webContents.send("timer:updated", timer);
+  if (timer.running || (timerWidgetWindow && !timerWidgetWindow.isDestroyed())) syncPetMoodFromWidgets();
+}
+
+function syncPetMoodFromWidgets(): void {
+  const timer = readData().timer;
+  const hasTimerWidget = Boolean(timerWidgetWindow && !timerWidgetWindow.isDestroyed());
+  if (timer.running || hasTimerWidget) {
+    mainWindow?.webContents.send("pet:mood", {
+      mood: timer.mode === "focus" ? "focus" : "recharge",
+      bubble: timer.running ? "" : "番茄钟贴在桌面上，一二陪你守着。",
+      durationMs: 0
+    } satisfies PetMoodEvent);
+    return;
+  }
+
+  if (noteWidgetWindows.size > 0) {
+    mainWindow?.webContents.send("pet:mood", {
+      mood: "note",
+      bubble: "便签贴在桌面上，一二帮你看着。",
+      durationMs: 0
+    } satisfies PetMoodEvent);
+    return;
+  }
+
+  mainWindow?.webContents.send("pet:mood", { mood: "idle", bubble: "", durationMs: 1_200 } satisfies PetMoodEvent);
 }
 
 function startTimerScheduler(): void {
@@ -398,6 +443,102 @@ function createPanelWindow(panel: string): void {
   });
 }
 
+function createNoteWidgetWindow(noteId: string): void {
+  const existing = noteWidgetWindows.get(noteId);
+  if (existing && !existing.isDestroyed()) {
+    existing.show();
+    existing.focus();
+    syncPetMoodFromWidgets();
+    return;
+  }
+
+  const mainBounds = mainWindow?.getBounds();
+  const offset = noteWidgetWindows.size * 24;
+  const x = mainBounds ? Math.max(20, mainBounds.x - 292 - offset) : undefined;
+  const y = mainBounds ? Math.max(20, mainBounds.y + 30 + offset) : undefined;
+
+  const widget = new BrowserWindow({
+    width: 292,
+    height: 230,
+    x,
+    y,
+    frame: false,
+    transparent: true,
+    resizable: false,
+    skipTaskbar: true,
+    alwaysOnTop: true,
+    webPreferences: {
+      preload: getPreloadPath(),
+      contextIsolation: true,
+      nodeIntegration: false
+    }
+  });
+
+  noteWidgetWindows.set(noteId, widget);
+  widget.loadURL(getRendererUrl(`/widget/note/${encodeURIComponent(noteId)}`));
+  widget.on("closed", () => {
+    noteWidgetWindows.delete(noteId);
+    syncPetMoodFromWidgets();
+  });
+  syncPetMoodFromWidgets();
+}
+
+function closeNoteWidgetWindow(noteId: string): void {
+  const widget = noteWidgetWindows.get(noteId);
+  if (!widget || widget.isDestroyed()) {
+    noteWidgetWindows.delete(noteId);
+    syncPetMoodFromWidgets();
+    return;
+  }
+  widget.close();
+}
+
+function createTimerWidgetWindow(): void {
+  if (timerWidgetWindow && !timerWidgetWindow.isDestroyed()) {
+    timerWidgetWindow.show();
+    timerWidgetWindow.focus();
+    syncPetMoodFromWidgets();
+    return;
+  }
+
+  const mainBounds = mainWindow?.getBounds();
+  const x = mainBounds ? Math.max(20, mainBounds.x - 252) : undefined;
+  const y = mainBounds ? Math.max(20, mainBounds.y + 82) : undefined;
+
+  timerWidgetWindow = new BrowserWindow({
+    width: 252,
+    height: 170,
+    x,
+    y,
+    frame: false,
+    transparent: true,
+    resizable: false,
+    skipTaskbar: true,
+    alwaysOnTop: true,
+    webPreferences: {
+      preload: getPreloadPath(),
+      contextIsolation: true,
+      nodeIntegration: false
+    }
+  });
+
+  timerWidgetWindow.loadURL(getRendererUrl("/widget/timer"));
+  timerWidgetWindow.on("closed", () => {
+    timerWidgetWindow = null;
+    syncPetMoodFromWidgets();
+  });
+  syncPetMoodFromWidgets();
+}
+
+function closeTimerWidgetWindow(): void {
+  if (!timerWidgetWindow || timerWidgetWindow.isDestroyed()) {
+    timerWidgetWindow = null;
+    syncPetMoodFromWidgets();
+    return;
+  }
+  timerWidgetWindow.close();
+}
+
 function refreshTray(): void {
   const data = readData();
   const icon = nativeImage.createFromPath(getResourcePath("assets", "icons", "icon.png"));
@@ -406,7 +547,7 @@ function refreshTray(): void {
   tray.setContextMenu(
     Menu.buildFromTemplate([
       {
-        label: mainWindow?.isVisible() ? "隐藏布布" : "显示布布",
+        label: mainWindow?.isVisible() ? "隐藏一二" : "显示一二",
         click: () => {
           if (!mainWindow) return;
           if (mainWindow.isVisible()) mainWindow.hide();
@@ -415,7 +556,7 @@ function refreshTray(): void {
         }
       },
       {
-        label: data.settings.alwaysOnTop ? "取消置顶" : "置顶布布",
+        label: data.settings.alwaysOnTop ? "取消置顶" : "置顶一二",
         click: () => {
           const next = readData();
           next.settings.alwaysOnTop = !next.settings.alwaysOnTop;
@@ -484,7 +625,7 @@ function showPetContextMenu(): void {
     { label: data.settings.edgeSnapEnabled ? "关闭边缘吸附" : "开启边缘吸附", click: toggleEdgeSnap },
     { type: "separator" },
     { label: "设置", click: () => createPanelWindow("settings") },
-    { label: mainWindow?.isVisible() ? "隐藏桌宠" : "显示桌宠", click: () => setMainWindowVisibility(!mainWindow?.isVisible()) },
+    { label: mainWindow?.isVisible() ? "隐藏一二" : "显示一二", click: () => setMainWindowVisibility(!mainWindow?.isVisible()) },
     { label: "退出", click: () => app.quit() }
   ]);
 
@@ -539,12 +680,18 @@ app.whenReady().then(() => {
   ipcMain.handle("window:roam", (_event, pace?: number) => roamPet(pace));
   ipcMain.handle("window:move-by", (_event, dx: number, dy: number) => movePetBy(dx, dy, false));
   ipcMain.handle("window:throw", (_event, velocityX: number, velocityY: number) => throwPet(velocityX, velocityY));
+  ipcMain.handle("window:click-through", (_event, value: boolean) => setPetClickThrough(value));
   ipcMain.handle("pet:mood", (_event, payload: PetMoodEvent) => {
     mainWindow?.webContents.send("pet:mood", payload);
+    if (payload.mood === "idle") setTimeout(syncPetMoodFromWidgets, 80);
   });
   ipcMain.handle("pet:context-menu", () => showPetContextMenu());
   ipcMain.handle("panel:open", (_event, panel: string) => createPanelWindow(panel));
   ipcMain.handle("panel:close", () => panelWindow?.close());
+  ipcMain.handle("widget:note:open", (_event, noteId: string) => createNoteWidgetWindow(noteId));
+  ipcMain.handle("widget:note:close", (_event, noteId: string) => closeNoteWidgetWindow(noteId));
+  ipcMain.handle("widget:timer:open", () => createTimerWidgetWindow());
+  ipcMain.handle("widget:timer:close", () => closeTimerWidgetWindow());
   ipcMain.handle("app:quit", () => app.quit());
   ipcMain.handle("shortcut:pick", async () => {
     const result = await dialog.showOpenDialog({
@@ -584,6 +731,9 @@ app.on("before-quit", () => {
   if (reminderTimer) clearInterval(reminderTimer);
   if (timerTimer) clearInterval(timerTimer);
   clearPetMotion();
+  for (const widget of noteWidgetWindows.values()) widget.destroy();
+  noteWidgetWindows.clear();
+  timerWidgetWindow?.destroy();
   panelWindow?.destroy();
   mainWindow?.destroy();
 });

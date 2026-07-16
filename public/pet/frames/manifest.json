@@ -6,7 +6,7 @@
   },
   "preferredFormat": "webp",
   "fallbackFormat": "png",
-  "notes": "Optimized WebP frames generated from retained PNG extracts. PNG frames remain for development fallback and source review.",
+  "notes": "Optimized WebP frames generated from retained GIF/PNG extracts. PNG frames remain for development fallback and source review.",
   "animations": {
     "angry": {
       "name": "angry optimized WebP frames",
@@ -546,31 +546,29 @@
       ]
     },
     "drag": {
-      "name": "drag alias of softIdle",
-      "frameMs": 160,
+      "name": "drag alias of walkDog",
+      "frameMs": 100,
       "loop": true,
       "format": "webp",
       "frames": [
-        "pet/frames/softIdle/softIdle_000.webp",
-        "pet/frames/softIdle/softIdle_001.webp",
-        "pet/frames/softIdle/softIdle_002.webp",
-        "pet/frames/softIdle/softIdle_003.webp",
-        "pet/frames/softIdle/softIdle_004.webp",
-        "pet/frames/softIdle/softIdle_005.webp",
-        "pet/frames/softIdle/softIdle_006.webp",
-        "pet/frames/softIdle/softIdle_007.webp",
-        "pet/frames/softIdle/softIdle_008.webp",
-        "pet/frames/softIdle/softIdle_009.webp",
-        "pet/frames/softIdle/softIdle_010.webp",
-        "pet/frames/softIdle/softIdle_011.webp",
-        "pet/frames/softIdle/softIdle_012.webp",
-        "pet/frames/softIdle/softIdle_013.webp",
-        "pet/frames/softIdle/softIdle_014.webp",
-        "pet/frames/softIdle/softIdle_015.webp",
-        "pet/frames/softIdle/softIdle_016.webp",
-        "pet/frames/softIdle/softIdle_017.webp"
+        "pet/frames/walkDog/walkDog_000.webp",
+        "pet/frames/walkDog/walkDog_001.webp",
+        "pet/frames/walkDog/walkDog_002.webp",
+        "pet/frames/walkDog/walkDog_003.webp",
+        "pet/frames/walkDog/walkDog_004.webp",
+        "pet/frames/walkDog/walkDog_005.webp",
+        "pet/frames/walkDog/walkDog_006.webp",
+        "pet/frames/walkDog/walkDog_007.webp",
+        "pet/frames/walkDog/walkDog_008.webp",
+        "pet/frames/walkDog/walkDog_009.webp",
+        "pet/frames/walkDog/walkDog_010.webp",
+        "pet/frames/walkDog/walkDog_011.webp",
+        "pet/frames/walkDog/walkDog_012.webp",
+        "pet/frames/walkDog/walkDog_013.webp",
+        "pet/frames/walkDog/walkDog_014.webp",
+        "pet/frames/walkDog/walkDog_015.webp"
       ],
-      "aliasOf": "softIdle"
+      "aliasOf": "walkDog"
     }
   }
 }

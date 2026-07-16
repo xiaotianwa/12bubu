@@ -87,7 +87,7 @@ const fallbackAnimations: Partial<Record<PetMood, FrameAnimation>> = {
   focus: fallbackAnimation("focus", "focus", 2, 360, "一二看书专注"),
   reminder: fallbackAnimation("reminder", "reminder", 6, 140, "一二举牌提醒"),
   settings: fallbackAnimation("settings", "settings", 6, 150, "一二整理设置"),
-  drag: fallbackAnimation("softIdle", "softIdle", 18, 160, "一二移动中"),
+  drag: fallbackAnimation("walkDog", "walkDog", 16, 100, "一二移动中"),
   happy: fallbackAnimation("happy", "happy", 4, 76, "一二开心"),
   dance: fallbackAnimation("dance", "dance", 16, 76, "一二和布布跳舞"),
   celebrate: fallbackAnimation("celebrate", "celebrate", 28, 108, "一二和布布庆祝"),

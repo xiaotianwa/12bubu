@@ -4,7 +4,8 @@ import { PetSprite } from "./PetSprite";
 import { FunctionWheel, type WheelAction } from "./FunctionWheel";
 
 const inactiveSleepMs = 90_000;
-const ambientActionMs = 30_000;
+const ambientActionMinMs = 6_500;
+const ambientActionMaxMs = 13_500;
 const longPressMs = 620;
 const interactionMoodMs = 5_200;
 const dragStartThresholdPx = 5;
@@ -21,8 +22,8 @@ const panelMood: Record<PanelName, PetMood> = {
 const panelBubble: Record<PanelName, string> = {
   notes: "便签打开啦，一二帮你记着。",
   timer: "番茄钟打开啦，一二进入专注状态。",
-  reminders: "提醒打开啦，布布会轻轻举牌。",
-  shortcuts: "启动工具箱打开啦。",
+  reminders: "提醒打开啦，一二会轻轻举牌。",
+  shortcuts: "启动工具箱打开啦，布布小车待命。",
   settings: "设置小抽屉打开咯。"
 };
 
@@ -31,17 +32,52 @@ interface AmbientAction {
   bubble: string;
   durationMs: number;
   roam?: boolean;
+  pace?: number;
 }
 
 const ambientActions: AmbientAction[] = [
-  { mood: "blink", bubble: "", durationMs: 1_300 },
+  { mood: "blink", bubble: "", durationMs: 1_200 },
+  { mood: "walk", bubble: "", durationMs: 3_800, roam: true, pace: 340 },
+  { mood: "patrol", bubble: "一二去桌面边上巡一圈。", durationMs: 4_200, roam: true, pace: 380 },
+  { mood: "ride", bubble: "布布小车出发。", durationMs: 3_600, roam: true, pace: 560 },
   { mood: "buddy", bubble: "一二和布布贴贴待机。", durationMs: 2_400 },
   { mood: "slack", bubble: "休息一下也没关系。", durationMs: 2_200 },
+  { mood: "silly", bubble: "一二做个小表情。", durationMs: 1_600 },
   { mood: "comfySleep", bubble: "偷偷打个小盹。", durationMs: 2_600 }
 ];
 
+interface LockedMood {
+  mood: PetMood;
+  bubble: string;
+}
+
+function formatTimer(seconds: number) {
+  const safeSeconds = Math.max(0, Math.floor(seconds));
+  const minutes = Math.floor(safeSeconds / 60).toString().padStart(2, "0");
+  const restSeconds = (safeSeconds % 60).toString().padStart(2, "0");
+  return `${minutes}:${restSeconds}`;
+}
+
 function randomItem<T>(items: T[]): T {
   return items[Math.floor(Math.random() * items.length)];
+}
+
+function randomAmbientDelay() {
+  return ambientActionMinMs + Math.round(Math.random() * (ambientActionMaxMs - ambientActionMinMs));
+}
+
+function isInteractiveElement(target: Element | null) {
+  return Boolean(
+    target?.closest(
+      [
+        ".pet-button",
+        ".onboarding-card",
+        ".wheel-dismiss-layer",
+        ".function-wheel .wheel-center-button",
+        ".function-wheel.is-open .wheel-button"
+      ].join(",")
+    )
+  );
 }
 
 export function PetHome() {
@@ -51,12 +87,20 @@ export function PetHome() {
   const [isDragging, setIsDragging] = useState(false);
   const [quietMode, setQuietMode] = useState(false);
   const [onboardingSeen, setOnboardingSeen] = useState(true);
+  const [timerState, setTimerState] = useState<AppData["timer"] | null>(null);
   const inactivityRef = useRef<number | null>(null);
   const moodTimerRef = useRef<number | null>(null);
-  const roamTimerRef = useRef<number | null>(null);
   const longPressTimerRef = useRef<number | null>(null);
   const timerMoodRef = useRef<PetMood | null>(null);
+  const timerMinuteNudgeRef = useRef<string | null>(null);
+  const timerFinalNudgeRef = useRef<string | null>(null);
+  const lockedMoodRef = useRef<LockedMood | null>(null);
+  const lastAmbientMoodRef = useRef<PetMood | null>(null);
   const moodRef = useRef<PetMood>("idle");
+  const wheelOpenRef = useRef(false);
+  const quietModeRef = useRef(false);
+  const isDraggingRef = useRef(false);
+  const clickThroughRef = useRef(false);
   const dragRef = useRef<{
     pointerId: number;
     startX: number;
@@ -75,6 +119,18 @@ export function PetHome() {
   }, [mood]);
 
   useEffect(() => {
+    wheelOpenRef.current = wheelOpen;
+  }, [wheelOpen]);
+
+  useEffect(() => {
+    quietModeRef.current = quietMode;
+  }, [quietMode]);
+
+  useEffect(() => {
+    isDraggingRef.current = isDragging;
+  }, [isDragging]);
+
+  useEffect(() => {
     let alive = true;
     const syncSettings = async () => {
       const data = await window.bubu.getData();
@@ -91,6 +147,36 @@ export function PetHome() {
     };
   }, []);
 
+  const setClickThrough = useCallback((value: boolean) => {
+    if (clickThroughRef.current === value) return;
+    clickThroughRef.current = value;
+    void window.bubu.setClickThrough(value);
+  }, []);
+
+  useEffect(() => {
+    const updateClickThrough = (event: PointerEvent) => {
+      if (isDraggingRef.current || wheelOpenRef.current) {
+        setClickThrough(false);
+        return;
+      }
+
+      const target = document.elementFromPoint(event.clientX, event.clientY);
+      setClickThrough(!isInteractiveElement(target));
+    };
+
+    const enableClickThrough = () => setClickThrough(true);
+
+    window.addEventListener("pointermove", updateClickThrough, { passive: true });
+    window.addEventListener("pointerleave", enableClickThrough, { passive: true });
+    setClickThrough(false);
+
+    return () => {
+      window.removeEventListener("pointermove", updateClickThrough);
+      window.removeEventListener("pointerleave", enableClickThrough);
+      setClickThrough(false);
+    };
+  }, [setClickThrough]);
+
   const clearMoodTimer = useCallback(() => {
     if (moodTimerRef.current) {
       window.clearTimeout(moodTimerRef.current);
@@ -98,54 +184,56 @@ export function PetHome() {
     }
   }, []);
 
-  const clearRoamTimer = useCallback(() => {
-    if (roamTimerRef.current) {
-      window.clearInterval(roamTimerRef.current);
-      roamTimerRef.current = null;
-    }
-  }, []);
-
-  const clearLongPressTimer = useCallback(() => {
-    if (longPressTimerRef.current) {
-      window.clearTimeout(longPressTimerRef.current);
-      longPressTimerRef.current = null;
-    }
+  const restoreBaseMood = useCallback(() => {
+    const locked = lockedMoodRef.current;
+    const nextMood = locked?.mood ?? "idle";
+    const nextBubble = locked?.bubble ?? defaultBubble;
+    moodRef.current = nextMood;
+    setMood(nextMood);
+    setBubble(nextBubble);
   }, []);
 
   const showMood = useCallback(
-    (nextMood: PetMood, nextBubble: string, durationMs = interactionMoodMs) => {
+    (nextMood: PetMood, nextBubble: string, durationMs = interactionMoodMs, lock = false) => {
       clearMoodTimer();
+      if (lock) lockedMoodRef.current = { mood: nextMood, bubble: nextBubble };
       moodRef.current = nextMood;
       setMood(nextMood);
       setBubble(nextBubble);
 
       if (durationMs > 0) {
         moodTimerRef.current = window.setTimeout(() => {
-          moodRef.current = "idle";
-          setMood("idle");
-          setBubble(defaultBubble);
+          restoreBaseMood();
         }, durationMs);
       }
     },
-    [clearMoodTimer]
+    [clearMoodTimer, restoreBaseMood]
   );
 
-  const startRoam = useCallback(
-    (pace = 420) => {
-      clearRoamTimer();
-      void window.bubu.roamPet(pace);
+  const unlockMood = useCallback(
+    (expectedMood?: PetMood) => {
+      if (!lockedMoodRef.current) return;
+      if (expectedMood && lockedMoodRef.current.mood !== expectedMood) return;
+      lockedMoodRef.current = null;
+      restoreBaseMood();
     },
-    [clearRoamTimer]
+    [restoreBaseMood]
   );
+
+  const startRoam = useCallback((pace = 420) => {
+    setClickThrough(false);
+    void window.bubu.roamPet(pace);
+  }, [setClickThrough]);
 
   const resetInactivity = useCallback(() => {
     if (inactivityRef.current) window.clearTimeout(inactivityRef.current);
     if (moodRef.current === "sleep") {
+      lockedMoodRef.current = null;
       showMood("idle", "醒啦，继续陪你。", 1_600);
     }
     inactivityRef.current = window.setTimeout(() => {
-      if (moodRef.current !== "idle") return;
-      showMood("sleep", "进入省电睡觉模式。", 0);
+      if (lockedMoodRef.current || moodRef.current !== "idle") return;
+      showMood("sleep", "一二进入省电睡觉模式。", 0, true);
     }, inactiveSleepMs);
   }, [showMood]);
 
@@ -162,41 +250,72 @@ export function PetHome() {
   useEffect(() => {
     return window.bubu.onPetMood(({ mood: nextMood, bubble: nextBubble, durationMs }) => {
       resetInactivity();
-      showMood(nextMood, nextBubble, durationMs ?? 5_200);
+      if (nextMood === "idle") lockedMoodRef.current = null;
+      showMood(nextMood, nextBubble, durationMs ?? 5_200, durationMs === 0 && nextMood !== "idle");
     });
   }, [resetInactivity, showMood]);
 
   useEffect(() => {
     const applyTimerMood = (timer: AppData["timer"]) => {
+      setTimerState(timer);
       if (timer.running) {
         const nextMood: PetMood = timer.mode === "focus" ? "focus" : "recharge";
         timerMoodRef.current = nextMood;
-        if (moodRef.current !== nextMood) showMood(nextMood, "", 0);
+        if (lockedMoodRef.current?.mood !== nextMood || moodRef.current !== nextMood) showMood(nextMood, "", 0, true);
+        if (timer.remainingSeconds <= 60 && timer.remainingSeconds > 10 && timerMinuteNudgeRef.current !== timer.mode) {
+          timerMinuteNudgeRef.current = timer.mode;
+          showMood(nextMood, "还剩 1 分钟，一二陪你收尾。", 2_600);
+        } else if (timer.remainingSeconds <= 10 && timerFinalNudgeRef.current !== timer.mode) {
+          timerFinalNudgeRef.current = timer.mode;
+          showMood(nextMood, "马上结束啦。", 1_400);
+        }
         return;
       }
 
       const previousTimerMood = timerMoodRef.current;
       timerMoodRef.current = null;
-      if (previousTimerMood && moodRef.current === previousTimerMood) showMood("idle", defaultBubble, 0);
+      timerMinuteNudgeRef.current = null;
+      timerFinalNudgeRef.current = null;
+      if (previousTimerMood) unlockMood(previousTimerMood);
     };
 
     void window.bubu.getData().then((data) => applyTimerMood(data.timer));
     return window.bubu.onTimerUpdate(applyTimerMood);
-  }, [showMood]);
+  }, [showMood, unlockMood]);
 
   useEffect(() => {
-    const id = window.setInterval(() => {
-      if (quietMode) return;
-      if (moodRef.current !== "idle" || wheelOpen) return;
-      const action = randomItem(ambientActions);
-      showMood(action.mood, action.bubble, action.durationMs);
-      if (action.roam) startRoam(action.mood === "ride" ? 520 : 380);
-    }, ambientActionMs);
-    return () => {
-      window.clearInterval(id);
-      clearRoamTimer();
+    let ambientTimer: number | null = null;
+
+    const queueNextAmbient = () => {
+      ambientTimer = window.setTimeout(playAmbientAction, randomAmbientDelay());
     };
-  }, [clearRoamTimer, quietMode, showMood, startRoam, wheelOpen]);
+
+    const playAmbientAction = () => {
+      if (quietModeRef.current || wheelOpenRef.current || isDraggingRef.current || lockedMoodRef.current) {
+        queueNextAmbient();
+        return;
+      }
+      if (moodRef.current !== "idle") {
+        queueNextAmbient();
+        return;
+      }
+
+      let action = randomItem(ambientActions);
+      if (ambientActions.length > 1 && action.mood === lastAmbientMoodRef.current) {
+        action = randomItem(ambientActions.filter((item) => item.mood !== lastAmbientMoodRef.current));
+      }
+      lastAmbientMoodRef.current = action.mood;
+      showMood(action.mood, action.bubble, action.durationMs);
+      if (action.roam) startRoam(action.pace);
+      window.setTimeout(queueNextAmbient, Math.max(900, action.durationMs + 400));
+    };
+
+    queueNextAmbient();
+
+    return () => {
+      if (ambientTimer) window.clearTimeout(ambientTimer);
+    };
+  }, [showMood, startRoam]);
 
   useEffect(() => {
     return window.bubu.onGentleReminder(({ message }) => {
@@ -208,9 +327,10 @@ export function PetHome() {
   useEffect(() => {
     return window.bubu.onTimerComplete(({ completedMode, message }) => {
       resetInactivity();
+      unlockMood(completedMode === "focus" ? "focus" : "recharge");
       showMood(completedMode === "focus" ? "celebrate" : "recharge", message, 4_200);
     });
-  }, [resetInactivity, showMood]);
+  }, [resetInactivity, showMood, unlockMood]);
 
   useEffect(() => {
     const closeWheel = (event: KeyboardEvent) => {
@@ -228,25 +348,28 @@ export function PetHome() {
 
   const openPanel = async (panel: PanelName) => {
     resetInactivity();
+    setClickThrough(false);
     setWheelOpen(false);
-    showMood(panelMood[panel], panelBubble[panel], interactionMoodMs);
+    showMood(panelMood[panel], panelBubble[panel], panel === "timer" ? 3_200 : 2_600);
     await window.bubu.openPanel(panel);
   };
 
   const playAction = (action: WheelAction) => {
     resetInactivity();
+    setClickThrough(false);
     setWheelOpen(false);
     if (action === "roam") {
-      const nextMood: PetMood = Math.random() > 0.72 ? "ride" : "walkDog";
-      showMood(nextMood, nextMood === "ride" ? "布布小车去远一点。" : "出去散步，换个位置。", 3_400);
-      startRoam(nextMood === "ride" ? 560 : 400);
+      const nextMood: PetMood = Math.random() > 0.65 ? "ride" : "walk";
+      showMood(nextMood, nextMood === "ride" ? "布布小车出发。" : "一二出去散步，换个位置。", 3_800);
+      startRoam(nextMood === "ride" ? 560 : 380);
     }
   };
 
   const toggleWheel = () => {
     resetInactivity();
+    setClickThrough(false);
     setWheelOpen((value) => !value);
-    showMood("idle", wheelOpen ? "" : "小工具展开，选一个吧。", 1_800);
+    if (!wheelOpen) showMood("idle", "", 900);
   };
 
   const dismissWheel = () => {
@@ -266,14 +389,23 @@ export function PetHome() {
     resetInactivity();
     clearLongPressTimer();
     longPressTimerRef.current = window.setTimeout(() => {
+      setClickThrough(false);
       setWheelOpen(true);
       showMood("idle", "小工具展开，选一个吧。", 1_800);
       longPressTimerRef.current = null;
     }, longPressMs);
   };
 
+  const clearLongPressTimer = () => {
+    if (longPressTimerRef.current) {
+      window.clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  };
+
   const handlePointerDown = (event: React.PointerEvent<HTMLElement>) => {
     if (event.button !== 0) return;
+    setClickThrough(false);
     resetInactivity();
     dragRef.current = {
       pointerId: event.pointerId,
@@ -309,7 +441,7 @@ export function PetHome() {
     suppressClickRef.current = true;
     clearLongPressTimer();
     setIsDragging(true);
-    if (moodRef.current !== "drag") showMood("drag", "", 0);
+    if (moodRef.current !== "drag") showMood("drag", "拎起一二啦。", 0);
     void window.bubu.movePet(dx, dy);
   };
 
@@ -321,7 +453,7 @@ export function PetHome() {
     setIsDragging(false);
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
     if (drag.moved) {
-      showMood("idle", "", 1_100);
+      showMood("happy", "一二站稳啦。", 1_200);
       void window.bubu.throwPet(drag.velocityX, drag.velocityY);
       window.setTimeout(() => {
         suppressClickRef.current = false;
@@ -341,18 +473,21 @@ export function PetHome() {
   };
 
   const hasBubble = bubble.trim().length > 0 && !wheelOpen;
+  const showCountdown = Boolean(timerState?.running && !wheelOpen);
+  const timerModeLabel = timerState?.mode === "break" ? "休息" : "专注";
 
   return (
     <main className={`pet-stage ${wheelOpen ? "has-wheel" : ""} ${quietMode ? "is-quiet-mode" : ""}`}>
       <button
         className="wheel-dismiss-layer no-drag"
         type="button"
-        aria-label="收起功能轮"
+        aria-label="收起功能栏"
         tabIndex={wheelOpen ? 0 : -1}
         onClick={dismissWheel}
       />
       <section
         className={`pet-hitbox ${isDragging ? "is-dragging" : ""}`}
+        onPointerEnter={() => setClickThrough(false)}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -364,9 +499,16 @@ export function PetHome() {
         }}
       >
         {hasBubble ? <div className="speech-bubble no-drag">{bubble}</div> : null}
+        {showCountdown ? (
+          <div className={`pet-countdown no-drag mode-${timerState?.mode ?? "focus"}`} aria-live="polite">
+            <span>{timerModeLabel}</span>
+            <strong>{formatTimer(timerState?.remainingSeconds ?? 0)}</strong>
+          </div>
+        ) : null}
         <button
           className="pet-button no-drag"
-          aria-label="一二布布"
+          aria-label="一二"
+          onPointerEnter={() => setClickThrough(false)}
           onPointerDown={(event) => {
             event.stopPropagation();
             handleLongPressStart();
@@ -392,6 +534,11 @@ export function PetHome() {
           onDoubleClick={(event) => {
             event.stopPropagation();
             toggleWheel();
+          }}
+          onContextMenu={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            void window.bubu.showPetMenu();
           }}
           onClick={(event) => {
             event.stopPropagation();
@@ -419,9 +566,9 @@ export function PetHome() {
         onQuit={() => window.bubu.quit()}
       />
       {!onboardingSeen ? (
-        <aside className="onboarding-card no-drag" aria-label="一二布布首次启动">
+        <aside className="onboarding-card no-drag" aria-label="一二和布布首次启动">
           <strong>一二和布布到桌面啦</strong>
-          <p>先按你的节奏来。</p>
+          <p>一二会陪你待机、走动和提醒；布布会在部分动画里一起出现。</p>
           <div>
             <button type="button" onClick={() => void completeOnboarding()}>
               开始

@@ -7,7 +7,7 @@ const labels: Record<ReminderType, string> = {
 };
 
 const messages: Record<ReminderType, string> = {
-  water: "该喝点水啦，布布举起小奶瓶。",
+  water: "该喝点水啦，一二举起小奶瓶。",
   rest: "休息一下眼睛吧，看看远处。"
 };
 
@@ -82,7 +82,7 @@ export function RemindersPanel() {
           </label>
         </article>
       ))}
-      <p className="hint">提醒会在后台运行：布布先冒温和气泡，再发静音系统通知，不抢焦点。</p>
+      <p className="hint">提醒会在后台运行：一二先冒温和气泡，再发静音系统通知，不抢焦点。</p>
     </div>
   );
 }
